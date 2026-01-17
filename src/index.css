@@ -1,0 +1,22 @@
+/* src/index.css */
+@import 'antd/dist/reset.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .all-\[unset\] {
+    all: unset;
+  }
+}
+
+
+
+
+
+svg {
+  vertical-align: initial;
+}
+.bg-img {
+  background-image: url('./assets/ver.jpeg');
+}

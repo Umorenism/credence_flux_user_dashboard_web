@@ -4,14 +4,14 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
   UsersIcon,
-  GiftIcon,
+  
   ShareIcon,
   TrophyIcon,
-  BanknotesIcon,
+ 
   UserGroupIcon,
-  CheckCircleIcon,
+  
   ClipboardDocumentIcon,
-  ClipboardDocumentCheckIcon,
+ 
 } from '@heroicons/react/24/solid';
 import QRCode from 'react-qr-code';
 import { userService } from '../../api/userApi';

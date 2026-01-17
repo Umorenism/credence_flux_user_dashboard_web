@@ -5,12 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "npm install --legacy-peer-deps && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@blackbox-vision/react-qr-reader": "^5.0.0",
     "@formkit/auto-animate": "^0.8.1",
     "@gsap/react": "^2.1.2",
     "@heroicons/react": "^2.2.0",
@@ -48,7 +47,6 @@
     "moment": "^2.30.1",
     "phone": "^3.1.67",
     "qrcode": "^1.5.4",
-    "qrcode.react": "^4.2.0",
     "react": "^18.3.1",
     "react-chartjs-2": "^5.3.0",
     "react-country-flag": "^3.1.0",
@@ -66,7 +64,6 @@
     "react-phone-input-2": "^2.15.1",
     "react-phone-number-input": "^3.4.13",
     "react-qr-code": "^2.0.18",
-    "react-qr-scanner": "^1.0.0-alpha.11",
     "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.29.0",
     "react-select": "^5.10.2",

@@ -205,7 +205,7 @@ import {
 } from "react-icons/fi";
 import { useTheme } from "./ui/ThemeContext";
 import { userService } from "../api/userApi";
-
+import logo from "../assets/flux.svg";
 export default function Sidebar({ isOpen, closeSidebar }) {
   const navigate = useNavigate();
   const { theme } = useTheme();
@@ -286,18 +286,29 @@ useEffect(() => {
       {isOpen && <div className="fixed inset-0 bg-black/60 backdrop-blur-sm md:hidden z-40" onClick={closeSidebar} />}
       <aside
         className={`fixed top-0 left-0 min-h-screen w-64
-          bg-white text-black
+          bg-gray-50 text-black
           dark:bg-gray-950 dark:text-gray-100
           shadow-2xl z-50
           transform transition-transform duration-300 ease-in-out overflow-y-auto
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
           md:translate-x-0 md:relative md:shadow-none`}
       >
-        <div className="p-6 border-b border-orange-900/50 dark:border-gray-800/70">
-          <h2 className="text-2xl font-bold text-orange-400 dark:text-orange-500 tracking-wider">
-            CREDENCEFLUX
-          </h2>
-        </div>
+       <div className="p-6 border-b border-orange-900/50 dark:border-gray-800/70 flex items-center justify-center">
+  <img
+    src={logo}
+    alt="CredenceFlux Logo"
+    className="
+      h-12 sm:h-16 md:h-20
+      w-auto
+      object-contain
+      drop-shadow-[0_0_18px_rgba(249,115,22,0.45)]
+      transition-transform duration-300
+      hover:scale-110
+    "
+  />
+</div>
+
+
 
         <nav className="flex flex-col gap-1 p-4">
           {navItems.map((item) => (

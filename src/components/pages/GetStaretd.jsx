@@ -916,7 +916,7 @@ const GetStarted = () => {
       />
 
       {/* Hero Section */}
-      <section className="min-h-screen flex items-center justify-center relative z-10 px-6 py-16">
+      {/* <section className="min-h-screen flex items-center justify-center relative z-10 px-6 py-16">
         <div className="text-center max-w-6xl">
           <motion.div initial={{ opacity: 0, y: 60 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2 }}>
             <motion.h1
@@ -931,7 +931,7 @@ const GetStarted = () => {
               transition={{ duration: 8, repeat: Infinity, repeatType: 'reverse' }}
             >
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-orange-300 to-white">
-                CREDENCEFLUX
+                CREDENCE <span className='text-white'>FLUX</span>
               </span>
             </motion.h1>
 
@@ -969,7 +969,131 @@ const GetStarted = () => {
             </p>
           </motion.div>
         </div>
-      </section>
+      </section> */}
+
+      <section className="min-h-screen flex items-center justify-center relative z-10 px-6 py-16 overflow-hidden">
+  {/* Crypto Background Layers */}
+  <div className="absolute inset-0 z-0 pointer-events-none">
+    {/* Dark base gradient with crypto feel */}
+    <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-950 to-black opacity-95" />
+
+    {/* Subtle crypto grid / circuit pattern */}
+    <div
+      className="absolute inset-0 opacity-30"
+      style={{
+        backgroundImage: `
+          radial-gradient(circle at 10% 20%, rgba(251, 191, 36, 0.08) 0%, transparent 50%),
+          radial-gradient(circle at 90% 80%, rgba(249, 115, 22, 0.06) 0%, transparent 50%),
+          linear-gradient(to right, #0f0f0f 1px, transparent 1px),
+          linear-gradient(to bottom, #0f0f0f 1px, transparent 1px)
+        `,
+        backgroundSize: '100px 100px, 100px 100px, 40px 40px, 40px 40px',
+      }}
+    />
+
+    {/* Floating crypto particles / orbs */}
+    {[...Array(12)].map((_, i) => (
+      <motion.div
+        key={i}
+        className="absolute w-3 h-3 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 blur-sm opacity-40"
+        style={{
+          top: `${Math.random() * 100}%`,
+          left: `${Math.random() * 100}%`,
+        }}
+        animate={{
+          y: [0, -80, 0],
+          x: [0, Math.random() * 60 - 30, 0],
+          scale: [1, 1.6, 1],
+          opacity: [0.3, 0.7, 0.3],
+        }}
+        transition={{
+          duration: 12 + Math.random() * 10,
+          repeat: Infinity,
+          delay: i * 0.8,
+          ease: "easeInOut",
+        }}
+      />
+    ))}
+
+    {/* Very faint floating crypto symbols */}
+    {['₿', 'Ξ', 'S', 'BNB', 'X', 'ADA', 'SOL'].map((symbol, i) => (
+      <motion.div
+        key={`symbol-${i}`}
+        className="absolute text-5xl font-black text-orange-500/20 select-none pointer-events-none"
+        style={{
+          top: `${10 + Math.random() * 80}%`,
+          left: `${5 + Math.random() * 90}%`,
+        }}
+        animate={{
+          y: [0, -40, 40, 0],
+          rotate: [0, 10, -10, 0],
+          opacity: [0.15, 0.35, 0.15],
+        }}
+        transition={{
+          duration: 20 + i * 3,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      >
+        {symbol}
+      </motion.div>
+    ))}
+  </div>
+
+  {/* Main content - raised above background */}
+  <div className="relative z-10 text-center max-w-6xl">
+    <motion.div initial={{ opacity: 0, y: 60 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2 }}>
+      <motion.h1
+        className="text-7xl sm:text-9xl md:text-[10rem] lg:text-[12rem] font-black tracking-[-0.08em] mb-6 leading-none"
+        animate={{
+          textShadow: [
+            '0 0 30px #f97316, 0 0 60px #f97316aa',
+            '0 0 60px #fb923c, 0 0 120px #fb923caa',
+            '0 0 30px #f97316, 0 0 60px #f97316aa',
+          ],
+        }}
+        transition={{ duration: 8, repeat: Infinity, repeatType: 'reverse' }}
+      >
+        <span className="bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-orange-300 to-white">
+          CREDENCE <span className="text-white">FLUX</span>
+        </span>
+      </motion.h1>
+
+      <p className="text-2xl sm:text-3xl md:text-4xl text-white/90 mb-12 tracking-widest font-light">
+        ROBOTIC EXECUTION ENGINE
+        <br className="hidden sm:block" />
+        <span className="text-orange-400 font-normal">— precision • flux • dominance</span>
+      </p>
+
+      <motion.div
+        className="flex flex-col sm:flex-row gap-8 justify-center items-center"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.7, duration: 1 }}
+      >
+        <motion.button
+          onClick={handleGetStarted}
+          className="px-16 py-6 text-2xl sm:text-3xl font-black uppercase tracking-widest bg-gradient-to-r from-orange-600 to-orange-400 rounded-xl border-2 border-orange-300/60 shadow-2xl shadow-orange-900/80"
+          whileHover={{ scale: 1.08, boxShadow: '0 0 80px #f97316, 0 0 120px #fb923c' }}
+          whileTap={{ scale: 0.96 }}
+        >
+          ACTIVATE NODE →
+        </motion.button>
+
+        <motion.a
+          href="#market"
+          className="text-orange-300 hover:text-white transition-colors text-xl underline underline-offset-8 decoration-orange-400/60"
+        >
+          observe live core →
+        </motion.a>
+      </motion.div>
+
+      <p className="mt-12 text-orange-200/60 text-base sm:text-lg tracking-wide">
+        24/7 UPTIME • NON-CUSTODIAL • QUANTUM SHIELD ACTIVE
+      </p>
+    </motion.div>
+  </div>
+</section>
 
       {/* Currency Pairs */}
       <section className="py-24 px-6 relative z-10 bg-gradient-to-b from-black to-gray-950">

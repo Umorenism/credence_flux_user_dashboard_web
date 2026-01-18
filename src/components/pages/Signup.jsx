@@ -89,28 +89,45 @@ export default function AuthPage() {
   setLoading(true);
 
   try {
+    // clear stale auth (important for multi-device login)
+    localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("user");
+
     const res = await loginUser(
-      form.email,
+      form.email.trim().toLowerCase(),
       form.password,
       form.twoFactorCode || undefined
     );
 
-    // ✅ CORRECT PATH
-    const token = res?.data?.data?.accessToken;
-    const user = res?.data?.data?.user;
+    const data = res?.data?.data;
 
-    if (!token) {
-      console.error("Full login response:", res);
-      throw new Error("No token received from server");
+    if (!data?.accessToken || !data?.user) {
+      console.error("Invalid login response:", res);
+      throw new Error("Invalid login response from server");
     }
 
-    // ✅ STORE
-    localStorage.setItem("token", token);
+    // ✅ normalize user for UI
+    const user = {
+      id: data.user.id,
+      username: data.user.username,
+      fullName: data.user.fullName,
+      email: data.user.email,
+      isEmailVerified: data.user.isEmailVerified,
+      avatar: null,
+    };
+
+    // ✅ persist auth
+    localStorage.setItem("token", data.accessToken);
+    localStorage.setItem("refreshToken", data.refreshToken);
     localStorage.setItem("user", JSON.stringify(user));
 
     toast.success("Login successful");
     navigate("/home", { replace: true });
+
   } catch (err) {
+    console.error("Login error:", err);
+
     const errorMsg =
       err?.response?.data?.message ||
       err?.message ||
@@ -121,6 +138,8 @@ export default function AuthPage() {
     setLoading(false);
   }
 };
+
+
 
 
 

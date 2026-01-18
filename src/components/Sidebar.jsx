@@ -4,70 +4,68 @@
 
 
 
-
+// // src/components/Sidebar.jsx
 // import React, { useEffect, useState } from "react";
 // import { Link, useNavigate } from "react-router-dom";
 // import {
 //   FiHome,
 //   FiCreditCard,
 //   FiArrowDownCircle,
-//   FiTrendingUp,
+//   FiCornerRightDown,
 //   FiClock,
-//   FiPlayCircle,
 //   FiUsers,
-//   FiActivity,
 //   FiShare2,
 //   FiHelpCircle,
 //   FiLogOut,
 //   FiUser,
-//   FiCornerRightDown,
 // } from "react-icons/fi";
 // import { useTheme } from "./ui/ThemeContext";
 // import { userService } from "../api/userApi";
-
+// import logo from "../assets/flux.svg";
 // export default function Sidebar({ isOpen, closeSidebar }) {
 //   const navigate = useNavigate();
 //   const { theme } = useTheme();
 
-//   // ✅ Initialize user from localStorage first
-//   const [user, setUser] = useState(() => {
-//     const savedUser = localStorage.getItem("user");
-//     if (savedUser) {
-//       try {
-//         return JSON.parse(savedUser);
-//       } catch {
-//         return { fullName: "User", avatar: null };
-//       }
-//     }
-//     return { fullName: "User", avatar: null };
-//   });
-
-//   // Fetch latest profile
-//   const loadProfile = async () => {
+//  // Hook to load user safely
+// const [user, setUser] = useState(() => {
+//   const saved = localStorage.getItem("user");
+//   if (saved) {
 //     try {
-//       const res = await userService.getProfile();
-//       if (res && res.fullName) {
-//         setUser({
-//           fullName: res.fullName,
-//           avatar: res.avatar || null,
-//         });
-//         localStorage.setItem(
-//           "user",
-//           JSON.stringify({ fullName: res.fullName, avatar: res.avatar || null })
-//         );
-//       }
-//     } catch (err) {
-//       console.error("Failed to load profile:", err);
+//       return JSON.parse(saved);
+//     } catch {
+//       return { fullName: "User", avatar: null, email: "", id: "" };
 //     }
-//   };
+//   }
+//   return { fullName: "User", avatar: null, email: "", id: "" };
+// });
 
-//   useEffect(() => {
-//     loadProfile();
+// const loadProfile = async () => {
+//   const token = localStorage.getItem("token");
+//   if (!token) return; // skip if no token
 
-//     // Optional: refresh profile every 60s
-//     const interval = setInterval(loadProfile, 60000);
-//     return () => clearInterval(interval);
-//   }, []);
+//   try {
+//     const res = await userService.getProfile();
+//     if (res && res.fullName) {
+//       const profile = {
+//         fullName: res.fullName,
+//         avatar: res.avatar || null,
+//         email: res.email || "",
+//         id: res.id || "",
+//       };
+//       setUser(profile); // update state
+//       localStorage.setItem("user", JSON.stringify(profile)); // update storage
+//     }
+//   } catch (err) {
+//     console.error("Failed to load profile:", err);
+//     // do NOT reset user — keeps the localStorage value
+//   }
+// };
+
+// useEffect(() => {
+//   loadProfile();
+//   const interval = setInterval(loadProfile, 60000);
+//   return () => clearInterval(interval);
+// }, []);
 
 //   const handleLogout = async () => {
 //     try {
@@ -88,11 +86,12 @@
 //   };
 
 //   const navItems = [
-//     { to: "/", icon: FiHome, label: "Dashboard" },
+//     { to: "/home", icon: FiHome, label: "Dashboard" },
 //     { to: "/deposits", icon: FiCreditCard, label: "Deposits" },
 //     { to: "/withdraw", icon: FiArrowDownCircle, label: "Withdraw" },
 //     { to: "/crypto", icon: FiCornerRightDown, label: "Convert Crypto" },
 //     { to: "/transactions", icon: FiClock, label: "Transaction History" },
+//      { to: "/trade", icon: FiCornerRightDown, label: "Trade Now" }, 
 //     { to: "/join-trade", icon: FiUsers, label: "Join Trade" },
 //     { to: "/refer", icon: FiShare2, label: "Referrals" },
 //     { to: "/support", icon: FiHelpCircle, label: "Help & Support" },
@@ -100,27 +99,32 @@
 
 //   return (
 //     <>
-//       {isOpen && (
-//         <div
-//           className="fixed inset-0 bg-black/60 backdrop-blur-sm md:hidden z-40"
-//           onClick={closeSidebar}
-//         />
-//       )}
-
+//       {isOpen && <div className="fixed inset-0 bg-black/60 backdrop-blur-sm md:hidden z-40" onClick={closeSidebar} />}
 //       <aside
 //         className={`fixed top-0 left-0 min-h-screen w-64
-//           bg-white text-black
+//           bg-gray-50 text-black
 //           dark:bg-gray-950 dark:text-gray-100
 //           shadow-2xl z-50
 //           transform transition-transform duration-300 ease-in-out overflow-y-auto
 //           ${isOpen ? "translate-x-0" : "-translate-x-full"}
 //           md:translate-x-0 md:relative md:shadow-none`}
 //       >
-//         <div className="p-6 border-b border-orange-900/50 dark:border-gray-800/70">
-//           <h2 className="text-2xl font-bold text-orange-400 dark:text-orange-500 tracking-wider">
-//             CREDENCEFLUX
-//           </h2>
-//         </div>
+//        <div className="p-6 border-b border-orange-900/50 dark:border-gray-800/70 flex items-center justify-center">
+//   <img
+//     src={logo}
+//     alt="CredenceFlux Logo"
+//     className="
+//       h-12 sm:h-16 md:h-20
+//       w-auto
+//       object-contain
+//       drop-shadow-[0_0_18px_rgba(249,115,22,0.45)]
+//       transition-transform duration-300
+//       hover:scale-110
+//     "
+//   />
+// </div>
+
+
 
 //         <nav className="flex flex-col gap-1 p-4">
 //           {navItems.map((item) => (
@@ -159,9 +163,7 @@
 //             )}
 
 //             <div className="flex-1 min-w-0">
-//               <p className="font-medium text-black dark:text-gray-100 truncate">
-//                 {user.fullName}
-//               </p>
+//               <p className="font-medium text-black dark:text-gray-100 truncate">{user.fullName}</p>
 //               <p className="text-xs underline text-black dark:text-gray-400">
 //                 <Link to="/profile">View Profile</Link>
 //               </p>
@@ -187,7 +189,6 @@
 
 
 
-
 // src/components/Sidebar.jsx
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -206,50 +207,55 @@ import {
 import { useTheme } from "./ui/ThemeContext";
 import { userService } from "../api/userApi";
 import logo from "../assets/flux.svg";
+
 export default function Sidebar({ isOpen, closeSidebar }) {
   const navigate = useNavigate();
   const { theme } = useTheme();
 
- // Hook to load user safely
-const [user, setUser] = useState(() => {
-  const saved = localStorage.getItem("user");
-  if (saved) {
+  // Load user from localStorage first
+  const [user, setUser] = useState(() => {
+    const saved = localStorage.getItem("user");
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch {
+        return { fullName: "", avatar: null, email: "", id: "" };
+      }
+    }
+    return { fullName: "", avatar: null, email: "", id: "" };
+  });
+
+  const [loading, setLoading] = useState(true);
+
+  // Fetch latest profile from API
+  const loadProfile = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return setLoading(false);
+
     try {
-      return JSON.parse(saved);
-    } catch {
-      return { fullName: "User", avatar: null, email: "", id: "" };
+      const res = await userService.getProfile();
+      if (res?.fullName) {
+        const profile = {
+          fullName: res.fullName,
+          avatar: res.avatar || null,
+          email: res.email || "",
+          id: res.id || "",
+        };
+        setUser(profile);
+        localStorage.setItem("user", JSON.stringify(profile));
+      }
+    } catch (err) {
+      console.error("Failed to load profile:", err);
+    } finally {
+      setLoading(false);
     }
-  }
-  return { fullName: "User", avatar: null, email: "", id: "" };
-});
+  };
 
-const loadProfile = async () => {
-  const token = localStorage.getItem("token");
-  if (!token) return; // skip if no token
-
-  try {
-    const res = await userService.getProfile();
-    if (res && res.fullName) {
-      const profile = {
-        fullName: res.fullName,
-        avatar: res.avatar || null,
-        email: res.email || "",
-        id: res.id || "",
-      };
-      setUser(profile); // update state
-      localStorage.setItem("user", JSON.stringify(profile)); // update storage
-    }
-  } catch (err) {
-    console.error("Failed to load profile:", err);
-    // do NOT reset user — keeps the localStorage value
-  }
-};
-
-useEffect(() => {
-  loadProfile();
-  const interval = setInterval(loadProfile, 60000);
-  return () => clearInterval(interval);
-}, []);
+  useEffect(() => {
+    loadProfile();
+    const interval = setInterval(loadProfile, 60000); // refresh every 60s
+    return () => clearInterval(interval);
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -275,7 +281,7 @@ useEffect(() => {
     { to: "/withdraw", icon: FiArrowDownCircle, label: "Withdraw" },
     { to: "/crypto", icon: FiCornerRightDown, label: "Convert Crypto" },
     { to: "/transactions", icon: FiClock, label: "Transaction History" },
-     { to: "/trade", icon: FiCornerRightDown, label: "Trade Now" }, 
+    { to: "/trade", icon: FiCornerRightDown, label: "Trade Now" },
     { to: "/join-trade", icon: FiUsers, label: "Join Trade" },
     { to: "/refer", icon: FiShare2, label: "Referrals" },
     { to: "/support", icon: FiHelpCircle, label: "Help & Support" },
@@ -283,7 +289,13 @@ useEffect(() => {
 
   return (
     <>
-      {isOpen && <div className="fixed inset-0 bg-black/60 backdrop-blur-sm md:hidden z-40" onClick={closeSidebar} />}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm md:hidden z-40"
+          onClick={closeSidebar}
+        />
+      )}
+
       <aside
         className={`fixed top-0 left-0 min-h-screen w-64
           bg-gray-50 text-black
@@ -293,23 +305,23 @@ useEffect(() => {
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
           md:translate-x-0 md:relative md:shadow-none`}
       >
-       <div className="p-6 border-b border-orange-900/50 dark:border-gray-800/70 flex items-center justify-center">
-  <img
-    src={logo}
-    alt="CredenceFlux Logo"
-    className="
-      h-12 sm:h-16 md:h-20
-      w-auto
-      object-contain
-      drop-shadow-[0_0_18px_rgba(249,115,22,0.45)]
-      transition-transform duration-300
-      hover:scale-110
-    "
-  />
-</div>
+        {/* Logo */}
+        <div className="p-6 border-b border-orange-900/50 dark:border-gray-800/70 flex items-center justify-center">
+          <img
+            src={logo}
+            alt="CredenceFlux Logo"
+            className="
+              h-12 sm:h-16 md:h-20
+              w-auto
+              object-contain
+              drop-shadow-[0_0_18px_rgba(249,115,22,0.45)]
+              transition-transform duration-300
+              hover:scale-110
+            "
+          />
+        </div>
 
-
-
+        {/* Navigation */}
         <nav className="flex flex-col gap-1 p-4">
           {navItems.map((item) => (
             <Link
@@ -327,13 +339,17 @@ useEffect(() => {
           ))}
         </nav>
 
+        {/* Profile & Logout */}
         <div className="mt-auto p-6 border-t border-orange-900/50 dark:border-gray-800/70">
           <div
             className="flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer
                        hover:bg-orange-900/30 transition-colors mb-2 dark:hover:bg-gray-800/50"
             onClick={() => navigate("/profile")}
           >
-            {user.avatar ? (
+            {/* Avatar */}
+            {loading ? (
+              <div className="w-10 h-10 rounded-full bg-gray-300 animate-pulse dark:bg-gray-700" />
+            ) : user.avatar ? (
               <img
                 src={user.avatar}
                 alt="Profile"
@@ -346,14 +362,18 @@ useEffect(() => {
               </div>
             )}
 
+            {/* Name */}
             <div className="flex-1 min-w-0">
-              <p className="font-medium text-black dark:text-gray-100 truncate">{user.fullName}</p>
+              <p className="font-medium text-black dark:text-gray-100 truncate">
+                {loading ? "Loading..." : user.fullName || "User"}
+              </p>
               <p className="text-xs underline text-black dark:text-gray-400">
                 <Link to="/profile">View Profile</Link>
               </p>
             </div>
           </div>
 
+          {/* Logout */}
           <div
             onClick={handleLogout}
             className="flex items-center gap-3 px-4 py-3 text-red-400 hover:bg-red-900/30 hover:text-red-300

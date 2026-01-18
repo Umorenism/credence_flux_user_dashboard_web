@@ -14,9 +14,9 @@ export const verifyEmail = (email, code) => {
   
 };
 export const forgetPassword = (email) => {
-  return apiClient.post("/api/auth/forget-password", { email });
-  
+  return apiClient.post("/api/auth/forgot-password", { email });
 };
+
 export const resetPassword = (password) => {
   return apiClient.post("/api/auth/reset-password/{token}", { password });
   

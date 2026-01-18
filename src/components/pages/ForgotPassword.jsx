@@ -1,14 +1,9 @@
 
-
-
-
-
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
 import { forgetPassword } from '../../api/authApi';
 import toast, { Toaster } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
@@ -17,16 +12,25 @@ export default function ForgotPassword() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email.trim()) return;
+    if (!email.trim()) {
+      toast.error('Please enter your email');
+      return;
+    }
 
     setLoading(true);
     try {
-      await forgetPassword(email.trim());
-      toast.success('Password reset link sent to your email');
+      const res = await forgetPassword({ email: email.trim() });
+      
+      // Backend returns: { success: true, message: "If email exists, a reset link will be sent" }
+      toast.success(res?.data?.message || 'Check your email for the reset link');
+
+      // Do NOT navigate automatically to reset-password because the token is in email
+      // User must click the link in the email which contains the token
     } catch (err) {
+      console.error('Forgot password error:', err);
       toast.error(
-        err.response?.data?.message ||
-          'Failed to send reset link. Try again.'
+        err?.response?.data?.message ||
+        'Unable to process request. Please try again.'
       );
     } finally {
       setLoading(false);
@@ -37,18 +41,6 @@ export default function ForgotPassword() {
     <div className="min-h-screen bg-gray-950 flex items-center justify-center px-4 relative overflow-hidden">
       <Toaster position="top-center" />
 
-      {/* Animated Background */}
-      <motion.div
-        animate={{ backgroundPosition: ['0% 0%', '100% 100%'] }}
-        transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
-        className="absolute inset-0 opacity-10"
-        style={{
-          backgroundImage:
-            'radial-gradient(circle, orange 1px, transparent 1px)',
-          backgroundSize: '70px 70px',
-        }}
-      />
-
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
@@ -58,7 +50,7 @@ export default function ForgotPassword() {
           Forgot Password
         </h2>
         <p className="text-gray-400 text-center mb-8">
-          Enter your email to receive a reset link
+          Enter your email address and we’ll send you a reset link
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -82,14 +74,12 @@ export default function ForgotPassword() {
             {loading ? 'Sending…' : 'Send Reset Link'}
           </motion.button>
         </form>
-
         <div className="mt-6 text-center">
-          <button
-            onClick={() => navigate('/signup')}
-            className="text-orange-400 hover:text-orange-300 text-sm"
-          >
+           <button
+             onClick={() => navigate('/signup')}
+            className="text-orange-400 hover:text-orange-300 text-sm"           >
             ← Back to Sign In
-          </button>
+           </button>
         </div>
       </motion.div>
     </div>

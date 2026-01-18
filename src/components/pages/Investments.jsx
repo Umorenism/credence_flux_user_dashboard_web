@@ -422,7 +422,7 @@ export default function Investments() {
 
                   <div className="bg-gray-50 dark:bg-gray-800/50 px-6 py-4 flex justify-end border-t border-gray-200 dark:border-gray-800">
                     <Link
-                      to="/deposits"
+                      to="/pairs"
                       className="px-5 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-medium rounded-lg transition shadow-sm"
                     >
                       Deposit to Invest

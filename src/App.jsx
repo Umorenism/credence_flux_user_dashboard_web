@@ -28,6 +28,7 @@ import JoinTrade from "./components/pages/JoinTrade";
 import Referrals from "./components/pages/Referrals";
 import Profile from "./components/pages/Profile";
 import Support from "./components/pages/Support";
+import TradingPairs from "./components/pages/pairs/TradingPairs";
 
 function App() {
   return (
@@ -62,6 +63,7 @@ function App() {
             <Route path="/refer" element={<Referrals />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/support" element={<Support />} />
+            <Route path="/pairs" element={<TradingPairs/>} />
 
           </Route>
         </Route>

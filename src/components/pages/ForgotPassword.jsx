@@ -10,32 +10,32 @@ export default function ForgotPassword() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!email.trim()) {
-      toast.error('Please enter your email');
-      return;
-    }
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    setLoading(true);
-    try {
-      const res = await forgetPassword({ email: email.trim() });
-      
-      // Backend returns: { success: true, message: "If email exists, a reset link will be sent" }
-      toast.success(res?.data?.message || 'Check your email for the reset link');
+  if (!email.trim()) {
+    toast.error("Please enter your email");
+    return;
+  }
 
-      // Do NOT navigate automatically to reset-password because the token is in email
-      // User must click the link in the email which contains the token
-    } catch (err) {
-      console.error('Forgot password error:', err);
-      toast.error(
-        err?.response?.data?.message ||
-        'Unable to process request. Please try again.'
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+  setLoading(true);
+  try {
+    const res = await forgetPassword(email.trim()); // ✅ FIX HERE
+
+    toast.success(
+      res?.data?.message || "Check your email for the reset link"
+    );
+  } catch (err) {
+    console.error("Forgot password error:", err);
+    toast.error(
+      err?.response?.data?.message ||
+        "Unable to process request. Please try again."
+    );
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="min-h-screen bg-gray-950 flex items-center justify-center px-4 relative overflow-hidden">

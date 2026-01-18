@@ -1073,7 +1073,7 @@ const GetStarted = () => {
       >
         <motion.button
           onClick={handleGetStarted}
-          className="px-16 py-6 text-2xl sm:text-3xl font-black uppercase tracking-widest bg-gradient-to-r from-orange-600 to-orange-400 rounded-xl border-2 border-orange-300/60 shadow-2xl shadow-orange-900/80"
+          className="px-16 py-6 text-sm sm:text-3xl font-black uppercase tracking-widest bg-gradient-to-r from-orange-600 to-orange-400 rounded-xl border-2 border-orange-300/60 shadow-2xl shadow-orange-900/80"
           whileHover={{ scale: 1.08, boxShadow: '0 0 80px #f97316, 0 0 120px #fb923c' }}
           whileTap={{ scale: 0.96 }}
         >

@@ -1,4 +1,4 @@
-// src/api/tradingService.js
+
 import { apiClient } from "./apiClient";
 
 export const tradingService = {

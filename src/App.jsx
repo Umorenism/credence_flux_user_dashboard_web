@@ -21,14 +21,15 @@ import Wallet from "./components/pages/Wallet";
 import Withdrawal from "./components/pages/Withdrawal";
 import TradingRecords from "./components/pages/TradingRecords";
 import Transactions from "./components/pages/Transaction";
-import Investments from "./components/pages/Investments";
+
 import CryptoPage from "./components/pages/CryptoPage";
 import RecentTrades from "./components/pages/RecentTrades";
 import JoinTrade from "./components/pages/JoinTrade";
 import Referrals from "./components/pages/Referrals";
 import Profile from "./components/pages/Profile";
 import Support from "./components/pages/Support";
-import TradingPairs from "./components/pages/pairs/TradingPairs";
+// import TradingPairs from "./components/pages/pairs/TradingPairs";
+import TradingDashboard from "./components/pages/TradingDashboard";
 
 function App() {
   return (
@@ -56,14 +57,14 @@ function App() {
             <Route path="/withdraw" element={<Withdrawal />} />
             <Route path="/trading-records" element={<TradingRecords />} />
             <Route path="/transactions" element={<Transactions />} />
-            <Route path="/trade" element={<Investments />} />
+            <Route path="/trade" element={<TradingDashboard />} />
             <Route path="/crypto" element={<CryptoPage />} />
             <Route path="/recent-trades" element={<RecentTrades />} />
             <Route path="/join-trade" element={<JoinTrade />} />
             <Route path="/refer" element={<Referrals />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/support" element={<Support />} />
-            <Route path="/pairs" element={<TradingPairs/>} />
+            {/* <Route path="/pairs" element={<TradingPairs/>} /> */}
 
           </Route>
         </Route>

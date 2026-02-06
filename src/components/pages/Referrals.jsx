@@ -194,28 +194,26 @@ export default function Referrals() {
           </div>
         ) : (
           <div className="space-y-4">
-            {referredUsers.map((user) => (
-              <div
-                key={user.id}
-                className="p-5 bg-gray-50 dark:bg-gray-800/60 rounded-xl border border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-gray-100 dark:hover:bg-gray-700/60"
-              >
-                <div>
-                  <p className="font-semibold text-gray-900 dark:text-white">{user.username}</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    Joined: {user.joinedAt ? new Date(user.joinedAt).toLocaleDateString() : 'Recently'}
-                  </p>
-                </div>
-                <div className="text-right sm:min-w-[120px]">
-                  <p className="text-sm font-medium">
-                    {user.status === 'active' ? (
-                      <span className="text-emerald-600 dark:text-emerald-400">Active</span>
-                    ) : (
-                      <span className="text-gray-500">Pending</span>
-                    )}
-                  </p>
-                </div>
-              </div>
-            ))}
+           
+{referredUsers.length === 0 && (
+  <div className="text-center py-12 text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/40 rounded-xl border border-dashed border-gray-300 dark:border-gray-700">
+    <UsersIcon className="w-12 h-12 mx-auto mb-4 opacity-60" />
+    <p className="text-lg font-medium mb-3">No referrals visible yet</p>
+    <p className="text-sm mb-4 max-w-md mx-auto">
+      New signups using your code may take 5–30 minutes to appear (or longer if they need to verify email or make a deposit).
+    </p>
+    <button
+      onClick={() => {
+        fetchReferralData();
+        toast.success("Refreshing...");
+      }}
+      disabled={loading}
+      className="mt-3 px-6 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg text-sm font-medium"
+    >
+      Refresh List
+    </button>
+  </div>
+)}
           </div>
         )}
       </motion.div>

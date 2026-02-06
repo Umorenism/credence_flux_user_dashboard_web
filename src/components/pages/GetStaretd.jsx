@@ -1077,7 +1077,7 @@ const GetStarted = () => {
           whileHover={{ scale: 1.08, boxShadow: '0 0 80px #f97316, 0 0 120px #fb923c' }}
           whileTap={{ scale: 0.96 }}
         >
-          ACTIVATE NODE →
+          Get started →
         </motion.button>
 
         <motion.a
@@ -1384,7 +1384,7 @@ const GetStarted = () => {
 
           <motion.button
             onClick={handleGetStarted}
-            className="px-20 sm:px-32 py-8 sm:py-10 text-3xl sm:text-4xl font-black uppercase bg-gradient-to-r from-orange-600 via-orange-500 to-orange-400 rounded-2xl border-2 border-orange-300/60 shadow-2xl shadow-orange-900/90"
+            className="px-20 sm:px-32 py-2 sm:py-10 text-xl sm:text-4xl font-black uppercase bg-gradient-to-r from-orange-600 via-orange-500 to-orange-400 rounded-2xl border-2 border-orange-300/60 shadow-2xl shadow-orange-900/90"
             whileHover={{ scale: 1.1, boxShadow: '0 0 120px #f97316, 0 0 180px #fb923c' }}
             whileTap={{ scale: 0.95 }}
           >

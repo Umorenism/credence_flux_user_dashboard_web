@@ -899,9 +899,14 @@ export default function Deposit() {
   };
 
   const handleUploadReceipt = async () => {
-    if (!depositResult?.paymentId || !receiptFile) {
-      setError('Missing payment ID or receipt file');
-      return;
+    if (!depositResult?.paymentId) {
+        setError('No active deposit request found');
+        return;
+    }
+
+    if (!receiptFile) {
+        setError('Please select a receipt file first');
+        return;
     }
 
     setUploadingReceipt(true);
@@ -909,54 +914,57 @@ export default function Deposit() {
     setMessage('');
 
     try {
-      const formData = new FormData();
-      formData.append('receipt', receiptFile);
+        const formData = new FormData();
+        formData.append('receipt', receiptFile);
+        formData.append('paymentId', depositResult.paymentId);     // ← added here
 
-      const res = await uploadReceipt(depositResult.paymentId, formData);
+        
 
-      if (res.success) {
-        setMessage('Receipt uploaded! Awaiting verification.');
-        setReceiptFile(null);
+        const res = await uploadReceipt(formData);                 
+        if (res?.success || res?.status === 200 || res?.status === 201) {
+            setMessage('Receipt uploaded successfully! Awaiting verification.');
+            setReceiptFile(null);
 
-        // Show congratulations popup + confetti
-        setShowSuccessPopup(true);
+            setShowSuccessPopup(true);
 
-        // Confetti burst - orange themed
-        confetti({
-          particleCount: 120,
-          spread: 70,
-          origin: { y: 0.6 },
-          colors: ['#f97316', '#fb923c', '#fed7aa', '#ffffff'],
-          ticks: 300,
-        });
+            confetti({
+                particleCount: 120,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#f97316', '#fb923c', '#fed7aa', '#ffffff'],
+                ticks: 300,
+            });
 
-        // Side bursts
-        setTimeout(() => {
-          confetti({
-            particleCount: 80,
-            angle: 60,
-            spread: 55,
-            origin: { x: 0.2, y: 0.6 },
-          });
-          confetti({
-            particleCount: 80,
-            angle: 120,
-            spread: 55,
-            origin: { x: 0.8, y: 0.6 },
-          });
-        }, 200);
+            setTimeout(() => {
+                confetti({
+                    particleCount: 80,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0.2, y: 0.6 },
+                });
+                confetti({
+                    particleCount: 80,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 0.8, y: 0.6 },
+                });
+            }, 200);
 
-        loadHistory();
-      } else {
-        throw new Error(res.message || 'Upload failed');
-      }
+            loadHistory();
+        } else {
+            throw new Error(res?.message || 'Upload did not complete successfully');
+        }
     } catch (err) {
-      console.error('Receipt upload error:', err);
-      setError(err.response?.data?.message || 'Failed to upload receipt.');
+        console.error('Receipt upload error:', err);
+        const errorMessage =
+            err.response?.data?.message ||
+            err.message ||
+            'Failed to upload receipt. Please try again.';
+        setError(errorMessage);
     } finally {
-      setUploadingReceipt(false);
+        setUploadingReceipt(false);
     }
-  };
+};
 
   const copyToClipboard = (text) => {
     if (!text) return;

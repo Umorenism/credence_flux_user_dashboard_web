@@ -86,33 +86,27 @@ export const getDepositById = async (id) => {
   return res.data;
 };
 
-/**
- * Upload payment receipt for a deposit
- * POST /api/deposits/:paymentId/receipt
- * Content-Type: multipart/form-data
- * @param {string} paymentId
- * @param {FormData} formData   → must contain field 'receipt' (File)
- */
-export const uploadReceipt = async (paymentId, formData) => {
+// tradingApi.js or depositapi.js — keep this version
+export const uploadReceipt = async (formData) => {
   try {
-    const res = await apiClient.post(
-      `/api/deposits/${paymentId}/receipt`,
+    const response = await apiClient.post(
+      "/api/trading/deposit/upload-receipt",
       formData,
       {
         headers: {
-         
+          "Content-Type": "multipart/form-data",
         },
       }
     );
 
-    console.log(`uploadReceipt (${paymentId}) response:`, res.data);
-    return res.data;
-  } catch (error) {
-    console.error(`uploadReceipt (${paymentId}) failed:`, error);
-    throw error.response?.data || {
-      success: false,
-      message: "Failed to upload receipt",
-      error: error.message,
-    };
+    console.log("uploadReceipt response:", response.data);
+    return response.data;
+  } catch (err) {
+    console.error("uploadReceipt failed:", {
+      status: err.response?.status,
+      data: err.response?.data,
+      message: err.message,
+    });
+    throw err.response?.data || { message: "Upload failed", error: err };
   }
 };

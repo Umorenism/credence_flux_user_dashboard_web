@@ -1,5 +1,3 @@
-
-// src/components/TradingDashboard.jsx
 // src/components/TradingDashboard.jsx
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -16,8 +14,53 @@ const handleApiError = (error) => {
   toast.error(message);
 };
 
+// Helper: Convert raw pair like "BITCOIN/USDT" → normalized object with proper ticker
+const normalizePair = (rawSymbol) => {
+  if (!rawSymbol || typeof rawSymbol !== 'string') return null;
+
+  let namePart, quotePart = 'USDT';
+  
+  if (rawSymbol.includes('/')) {
+    [namePart, quotePart] = rawSymbol.split('/');
+  } else {
+    namePart = rawSymbol;
+  }
+
+  const upperName = namePart.trim().toUpperCase();
+
+  // Mapping: full name → standard ticker symbol
+  const nameToTicker = {
+    'BITCOIN': 'BTC',
+    'ETHEREUM': 'ETH',
+    'BNB': 'BNB',
+    'SOL': 'SOL',
+    'DOGE': 'DOGE',
+    'XRP': 'XRP',
+    'LTC': 'LTC',
+    'ADA': 'ADA',
+    'CAKE': 'CAKE',
+    'PEPE': 'PEPE',
+    'WFI': 'WFI',
+    'AVAX': 'AVAX',
+    'BCH': 'BCH',
+    'UNI': 'UNI',
+  };
+
+  const base = nameToTicker[upperName] || upperName;
+
+  quotePart = quotePart.trim().toUpperCase();
+
+  return {
+    raw: rawSymbol,
+    displaySymbol: `${base}/${quotePart}`,
+    apiSymbol: `${base}${quotePart}`,
+    baseAsset: base,
+    quoteAsset: quotePart,
+  };
+};
+
 export default function TradingDashboard() {
-  const [pairs, setPairs] = useState([]); // will hold ["BITCOIN/USDT", ...]
+  const [pairs, setPairs] = useState([]);           // array of normalized pair objects
   const [portfolio, setPortfolio] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -37,7 +80,6 @@ export default function TradingDashboard() {
           tradingService.getPortfolio(),
         ]);
 
-        // Handle the real response structure: { success: true, data: [...], count: 14 }
         let receivedPairs = [];
         if (pairsResponse?.data?.success && Array.isArray(pairsResponse.data.data)) {
           receivedPairs = pairsResponse.data.data;
@@ -45,10 +87,16 @@ export default function TradingDashboard() {
           receivedPairs = pairsResponse.data;
         }
 
-        setPairs(receivedPairs);
+        // Normalize + sort alphabetically by base ticker
+        const normalized = receivedPairs
+          .map(normalizePair)
+          .filter(Boolean)
+          .sort((a, b) => a.baseAsset.localeCompare(b.baseAsset));
+
+        setPairs(normalized);
         setPortfolio(portfolioResponse?.data ?? null);
 
-        if (receivedPairs.length === 0) {
+        if (normalized.length === 0) {
           toast.info('No trading pairs available at this time.');
         }
       } catch (err) {
@@ -62,18 +110,16 @@ export default function TradingDashboard() {
     loadData();
   }, []);
 
-  const openTradeModal = (symbol) => {
-    setSelectedPair(symbol);
+  const openTradeModal = (pairObj) => {
+    setSelectedPair(pairObj);
     setTradeSide('buy');
     setTradeAmount('');
     setShowTradeModal(true);
   };
 
-  const getBaseCurrency = (symbol) => symbol?.split('/')[0] || '';
-
   const hasEnoughToSell = () => {
     if (!portfolio?.holdings || !selectedPair) return false;
-    const base = getBaseCurrency(selectedPair);
+    const base = selectedPair.baseAsset;
     const heldAmount = Number(portfolio.holdings[base] || 0);
     return heldAmount >= Number(tradeAmount || 0);
   };
@@ -86,7 +132,7 @@ export default function TradingDashboard() {
     }
 
     if (tradeSide === 'sell' && !hasEnoughToSell()) {
-      toast.error(`Insufficient ${getBaseCurrency(selectedPair)} balance`);
+      toast.error(`Insufficient ${selectedPair.baseAsset} balance`);
       return;
     }
 
@@ -94,13 +140,15 @@ export default function TradingDashboard() {
     try {
       const payload = {
         side: tradeSide.toUpperCase(),
-        symbol: selectedPair,
-        amount: amount, // in USDT (quote currency)
+        symbol: selectedPair.apiSymbol,     // ← BTCUSDT, ETHUSDT, etc.
+        amount: amount,
       };
 
       await tradingService.executeTrade(payload);
 
-      toast.success(`Order placed: ${tradeSide.toUpperCase()} ${amount} USDT - ${selectedPair}`);
+      toast.success(
+        `Order placed: ${tradeSide.toUpperCase()} ${amount} USDT – ${selectedPair.displaySymbol}`
+      );
       setShowTradeModal(false);
       setShowSuccessModal(true);
       setTradeAmount('');
@@ -131,7 +179,7 @@ export default function TradingDashboard() {
             )}
           </div>
           <button
-            onClick={() => window.location.reload()} // simple refresh for now
+            onClick={() => window.location.reload()}
             disabled={loading}
             className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium disabled:opacity-60 transition"
           >
@@ -155,20 +203,22 @@ export default function TradingDashboard() {
             No trading pairs available right now.
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-            {pairs.map((symbol) => (
+          <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 gap-5">
+            {pairs.map((pair) => (
               <motion.div
-                key={symbol}
+                key={pair.apiSymbol}
                 whileHover={{ scale: 1.03, y: -4 }}
                 className="bg-white dark:bg-gray-800 rounded-xl shadow hover:shadow-xl border border-gray-200 dark:border-gray-700 hover:border-orange-500/60 cursor-pointer transition-all duration-200"
-                onClick={() => openTradeModal(symbol)}
+                onClick={() => openTradeModal(pair)}
               >
                 <div className="p-6">
                   <div className="flex items-baseline gap-2">
                     <h3 className="text-xl font-bold tracking-tight">
-                      {symbol.replace('/USDT', '')}
+                      {pair.baseAsset}
                     </h3>
-                    <span className="text-sm font-medium text-gray-500 dark:text-gray-400">/USDT</span>
+                    <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      /{pair.quoteAsset}
+                    </span>
                   </div>
                   <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                     Spot Market
@@ -180,7 +230,7 @@ export default function TradingDashboard() {
         )}
       </main>
 
-      {/* Trade Modal - simplified & safe */}
+      {/* Trade Modal */}
       <AnimatePresence>
         {showTradeModal && selectedPair && (
           <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
@@ -192,7 +242,7 @@ export default function TradingDashboard() {
             >
               <div className="flex justify-between items-center mb-5">
                 <h2 className="text-2xl font-bold text-orange-600 dark:text-orange-400">
-                  {tradeSide.toUpperCase()} {selectedPair}
+                  {tradeSide.toUpperCase()} {selectedPair.displaySymbol}
                 </h2>
                 <button
                   onClick={() => setShowTradeModal(false)}
@@ -256,7 +306,7 @@ export default function TradingDashboard() {
         )}
       </AnimatePresence>
 
-      {/* Success feedback */}
+      {/* Success Modal */}
       <AnimatePresence>
         {showSuccessModal && (
           <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
@@ -271,12 +321,10 @@ export default function TradingDashboard() {
                 Order Placed!
               </h2>
               <p className="text-gray-600 dark:text-gray-300 mb-6">
-                {tradeSide.toUpperCase()} {tradeAmount} USDT – {selectedPair}
+                {tradeSide.toUpperCase()} {tradeAmount} USDT – {selectedPair.displaySymbol}
               </p>
               <button
-                onClick={() => {
-                  setShowSuccessModal(false);
-                }}
+                onClick={() => setShowSuccessModal(false)}
                 className="w-full py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-xl font-bold"
               >
                 Continue Trading

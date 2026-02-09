@@ -1268,6 +1268,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState(null);
   const [showReferPopup, setShowReferPopup] = useState(false); // Popup state
+  const [change, setChange] = useState(false);
 
   // 1. Logic for the 1-minute interval popup
   useEffect(() => {
@@ -1404,7 +1405,7 @@ export default function Dashboard() {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 md:gap-6"
+          className="flex flex-col sm:flex-col sm:items-start sm:justify-between gap-4 md:gap-6"
         >
           <div>
             <h1 className="text-2xl md:text-3xl font-bold text-orange-600">
@@ -1415,19 +1416,52 @@ export default function Dashboard() {
             </p>
           </div>
 
-          <div className="flex mt-2 flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
-            <motion.div
-              animate={{ scale: [1, 1.08, 1], opacity: [0.9, 1, 0.9] }}
-              transition={{ duration: 4, repeat: Infinity, repeatType: "reverse" }}
-              className="flex items-center justify-center"
-            >
-              <img
-                src={companyLogo}
-                alt="Company Logo"
-                className="h-14 w-14 md:h-16 md:w-16 object-contain bg-white dark:bg-gray-800 p-2 rounded-xl border border-gray-200 dark:border-gray-700"
-              />
-            </motion.div>
-          </div>
+     <div className="flex w-full mt-2 flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
+
+  {/* 📱 MOBILE: Logo only */}
+  <motion.div
+    animate={{ scale: [1, 1.08, 1], opacity: [0.9, 1, 0.9] }}
+    transition={{ duration: 4, repeat: Infinity, repeatType: "reverse" }}
+    className="flex items-center p-1 justify-center md:hidden"
+  >
+    <img
+      src={companyLogo}
+      alt="Company Logo"
+      className="h-24 w-full object-cover bg-white dark:bg-gray-800 p-2 rounded-xl border border-gray-200 dark:border-gray-700"
+    />
+  </motion.div>
+
+  {/* 🖥️ DESKTOP: Sliding text */}
+  {/* <div className="hidden md:flex items-center overflow-hidden w-full max-w-md">
+    <motion.div
+      animate={{ x: ["100%", "-100%"] }}
+      transition={{
+        repeat: Infinity,
+        duration: 12,
+        ease: "linear",
+      }}
+      className="whitespace-nowrap text-lg font-semibold text-orange-600 dark:text-orange-400"
+    >
+      🚀 Trade smarter • Secure investments • Fast withdrawals • Trusted platform
+    </motion.div>
+  </div> */}
+
+  <div className="hidden md:flex items-center overflow-hidden w-full ">
+    <motion.div
+      animate={{ x: ["100%", "-100%"] }}
+      transition={{
+        repeat: Infinity,
+        duration: 12,
+        ease: "linear",
+      }}
+      className="whitespace-nowrap text-lg font-semibold text-orange-600 dark:text-orange-400"
+    >
+      🚀 Trade smarter • Secure investments • Fast withdrawals • Trusted platform
+    </motion.div>
+  </div>
+
+</div>
+
         </motion.div>
 
         {/* Stats Cards */}

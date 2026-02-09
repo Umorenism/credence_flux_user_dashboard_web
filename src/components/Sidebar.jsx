@@ -534,11 +534,11 @@ export default function Sidebar({ isOpen, closeSidebar }) {
       >
         {/* Logo Section - UI Kept original, added overflow-hidden to prevent overlap */}
         <div className="p-2 border-b border-gray-200 dark:border-gray-800 flex justify-start overflow-hidden">
-          <div className="h-24  w-full lg:mt-10  dark:bg-gray-900 rounded-lg flex items-center text-2xl font-bold text-orange-500 drop-shadow-md overflow-hidden">
+          <div className="h-24  w-full  lg:h-40  rounded-lg flex items-center text-2xl font-bold text-orange-500 drop-shadow-md overflow-hidden">
             <img
               src={logo}
               alt="CredenceFlux Logo"
-              className="h-full  object-contain drop-shadow-lg"
+              className="h-full object-contain p-4 lg:p-0 drop-shadow-lg"
               onClick={() => navigate("/home")}
             />
           </div>

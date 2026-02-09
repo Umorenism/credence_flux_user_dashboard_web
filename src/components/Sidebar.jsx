@@ -538,14 +538,14 @@ export default function Sidebar({ isOpen, closeSidebar }) {
             <img
               src={logo}
               alt="CredenceFlux Logo"
-              className="h-full w-auto  object-contain drop-shadow-lg"
+              className="h-full  object-contain drop-shadow-lg"
               onClick={() => navigate("/home")}
             />
           </div>
         </div>
 
         {/* Main Navigation - Added relative z-10 to ensure links stay on top */}
-        <nav className="flex-1 px-3 py-3 space-y-1 relative z-10">
+        <nav className="flex-1 px-3 py-3  space-y-1 relative z-10">
           {navItems.map((item) => (
             <Link
               key={item.to}

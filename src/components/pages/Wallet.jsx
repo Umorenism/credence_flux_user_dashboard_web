@@ -1009,6 +1009,7 @@ export default function Deposit() {
                 required
               />
             </div>
+            <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'} text-sm`}><span>Minimum deposit amount: $50</span></p>
 
             <button 
               type="submit" 

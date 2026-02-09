@@ -845,16 +845,589 @@
 
 
 
-// src/pages/GetStarted.js
-import React from 'react';
-import { motion } from 'framer-motion';
+// // src/pages/GetStarted.js
+// import React, { useEffect } from 'react';
+// import { motion } from 'framer-motion';
+// import { useNavigate } from 'react-router-dom';
+// import {
+//   MarketOverview,
+//   MiniChart,
+//   AdvancedRealTimeChart,
+// } from 'react-ts-tradingview-widgets';
+
+// const pairs = [
+//   { pair: 'BTC/USDT', change: '+4.82%', color: '#fbbf24' },
+//   { pair: 'ETH/USDT', change: '-1.34%', color: '#f97316' },
+//   { pair: 'SOL/USDT', change: '+12.7%', color: '#fbbf24' },
+//   { pair: 'BNB/USDT', change: '+3.19%', color: '#fbbf24' },
+//   { pair: 'XRP/USDT', change: '-0.89%', color: '#f97316' },
+//   { pair: 'ADA/USDT', change: '+7.41%', color: '#fbbf24' },
+// ];
+
+// const topTraders = [
+//   { rank: 1, name: 'NEUROPH4NT0M', profit: '+384.2%', trades: 1247, avatar: '⚡' },
+//   { rank: 2, name: 'FLUXSH4D0W', profit: '+312.9%', trades: 891, avatar: '⛓️' },
+//   { rank: 3, name: 'QUANTKRAKEN', profit: '+267.8%', trades: 1563, avatar: '🌀' },
+//   { rank: 4, name: 'CYBERHAWK', profit: '+219.4%', trades: 732, avatar: '⚙️' },
+//   { rank: 5, name: 'VOIDTRADER_X', profit: '+198.7%', trades: 1041, avatar: '⌖' },
+// ];
+
+// const recentPayments = [
+//   { time: '2m ago', user: '0xA7...9fD2', amount: '12.84 ETH', type: 'Deposit' },
+//   { time: '7m ago', user: '0xF3...c81B', amount: '4500 USDT', type: 'Withdrawal' },
+//   { time: '14m ago', user: '0x9e...2aD4', amount: '8.21 SOL', type: 'Deposit' },
+//   { time: '19m ago', user: '0x4B...e7f9', amount: '1.2 BTC', type: 'Deposit' },
+//   { time: '31m ago', user: '0xD1...8bC3', amount: '9800 USDT', type: 'Withdrawal' },
+// ];
+
+// const marketCapsMini = [
+//   { symbol: 'BINANCE:BTCUSDT', name: 'Bitcoin', cap: '$1.88T' },
+//   { symbol: 'BINANCE:ETHUSDT', name: 'Ethereum', cap: '$367B' },
+//   { symbol: 'BINANCE:SOLUSDT', name: 'Solana', cap: '~$68B' },
+//   { symbol: 'BINANCE:XRPUSDT', name: 'XRP', cap: '~$125B' },
+//   { symbol: 'BINANCE:BNBUSDT', name: 'BNB', cap: '~$130B' },
+//   { symbol: 'BINANCE:ADAUSDT', name: 'Cardano', cap: '$39B' },
+// ];
+
+// const steps = [
+//   { number: 1, icon: '🔗', title: 'CONNECT WALLET', desc: 'Establish secure link to MetaMask / WalletConnect node.' },
+//   { number: 2, icon: '🛡️', title: 'VERIFY IDENTITY', desc: 'Optional KYC protocol activation or anonymous flux entry.' },
+//   { number: 3, icon: '💰', title: 'DEPOSIT ASSETS', desc: 'Inject capital — crypto / fiat on-ramp vectors enabled.' },
+//   { number: 4, icon: '📊', title: 'SELECT PROTOCOL', desc: 'Configure spot / futures / AI-flux execution mode.' },
+//   { number: 5, icon: '🚀', title: 'EXECUTE & OBSERVE', desc: 'Deploy commands. Monitor neural feedback loop live.' },
+// ];
+
+// const GetStarted = () => {
+//   const navigate = useNavigate();
+//   const handleGetStarted = () => navigate('/signup');
+//   const [showReferPopup, setShowReferPopup] = useState(false); // Popup state
+  
+
+//   useEffect(()=>{
+//     const interval = setInterval(()=>{
+//       setShowReferPopup(true)
+//     }, 10000) // Show popup every 10 seconds
+
+//     return () => clearInterval(interval);
+//   })
+
+//   return (
+//     <div className="min-h-screen bg-black text-white overflow-x-hidden relative font-mono">
+//       {/* Circuit grid */}
+//       <div className="fixed inset-0 pointer-events-none">
+//         <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f0f0f_1px,transparent_1px),linear-gradient(to_bottom,#0f0f0f_1px,transparent_1px)] bg-[size:60px_60px] opacity-70" />
+//       </div>
+
+//       {/* Orange scan line */}
+//       <motion.div
+//         className="fixed inset-0 pointer-events-none bg-gradient-to-b from-transparent via-orange-500/30 to-transparent blur-md z-50"
+//         animate={{ y: ['-150%', '150%'] }}
+//         transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}
+//       />
+
+//       {/* Hero Section */}
+//       {/* <section className="min-h-screen flex items-center justify-center relative z-10 px-6 py-16">
+//         <div className="text-center max-w-6xl">
+//           <motion.div initial={{ opacity: 0, y: 60 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2 }}>
+//             <motion.h1
+//               className="text-7xl sm:text-9xl md:text-[10rem] lg:text-[12rem] font-black tracking-[-0.08em] mb-6 leading-none"
+//               animate={{
+//                 textShadow: [
+//                   '0 0 30px #f97316, 0 0 60px #f97316aa',
+//                   '0 0 60px #fb923c, 0 0 120px #fb923caa',
+//                   '0 0 30px #f97316, 0 0 60px #f97316aa',
+//                 ],
+//               }}
+//               transition={{ duration: 8, repeat: Infinity, repeatType: 'reverse' }}
+//             >
+//               <span className="bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-orange-300 to-white">
+//                 CREDENCE <span className='text-white'>FLUX</span>
+//               </span>
+//             </motion.h1>
+
+//             <p className="text-2xl sm:text-3xl md:text-4xl text-white/90 mb-12 tracking-widest font-light">
+//               ROBOTIC EXECUTION ENGINE
+//               <br className="hidden sm:block" />
+//               <span className="text-orange-400 font-normal">— precision • flux • dominance</span>
+//             </p>
+
+//             <motion.div
+//               className="flex flex-col sm:flex-row gap-8 justify-center items-center"
+//               initial={{ opacity: 0, y: 40 }}
+//               animate={{ opacity: 1, y: 0 }}
+//               transition={{ delay: 0.7, duration: 1 }}
+//             >
+//               <motion.button
+//                 onClick={handleGetStarted}
+//                 className="px-16 py-6 text-2xl sm:text-3xl font-black uppercase tracking-widest bg-gradient-to-r from-orange-600 to-orange-400 rounded-xl border-2 border-orange-300/60 shadow-2xl shadow-orange-900/80"
+//                 whileHover={{ scale: 1.08, boxShadow: '0 0 80px #f97316, 0 0 120px #fb923c' }}
+//                 whileTap={{ scale: 0.96 }}
+//               >
+//                 ACTIVATE NODE →
+//               </motion.button>
+
+//               <motion.a
+//                 href="#market"
+//                 className="text-orange-300 hover:text-white transition-colors text-xl underline underline-offset-8 decoration-orange-400/60"
+//               >
+//                 observe live core →
+//               </motion.a>
+//             </motion.div>
+
+//             <p className="mt-12 text-orange-200/60 text-base sm:text-lg tracking-wide">
+//               24/7 UPTIME • NON-CUSTODIAL • QUANTUM SHIELD ACTIVE
+//             </p>
+//           </motion.div>
+//         </div>
+//       </section> */}
+
+//       <section className="min-h-screen flex items-center justify-center relative z-10 px-6 py-16 overflow-hidden">
+//   {/* Crypto Background Layers */}
+//   <div className="absolute inset-0 z-0 pointer-events-none">
+//     {/* Dark base gradient with crypto feel */}
+//     <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-950 to-black opacity-95" />
+
+//     {/* Subtle crypto grid / circuit pattern */}
+//     <div
+//       className="absolute inset-0 opacity-30"
+//       style={{
+//         backgroundImage: `
+//           radial-gradient(circle at 10% 20%, rgba(251, 191, 36, 0.08) 0%, transparent 50%),
+//           radial-gradient(circle at 90% 80%, rgba(249, 115, 22, 0.06) 0%, transparent 50%),
+//           linear-gradient(to right, #0f0f0f 1px, transparent 1px),
+//           linear-gradient(to bottom, #0f0f0f 1px, transparent 1px)
+//         `,
+//         backgroundSize: '100px 100px, 100px 100px, 40px 40px, 40px 40px',
+//       }}
+//     />
+
+//     {/* Floating crypto particles / orbs */}
+//     {[...Array(12)].map((_, i) => (
+//       <motion.div
+//         key={i}
+//         className="absolute w-3 h-3 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 blur-sm opacity-40"
+//         style={{
+//           top: `${Math.random() * 100}%`,
+//           left: `${Math.random() * 100}%`,
+//         }}
+//         animate={{
+//           y: [0, -80, 0],
+//           x: [0, Math.random() * 60 - 30, 0],
+//           scale: [1, 1.6, 1],
+//           opacity: [0.3, 0.7, 0.3],
+//         }}
+//         transition={{
+//           duration: 12 + Math.random() * 10,
+//           repeat: Infinity,
+//           delay: i * 0.8,
+//           ease: "easeInOut",
+//         }}
+//       />
+//     ))}
+
+//     {/* Very faint floating crypto symbols */}
+//     {['₿', 'Ξ', 'S', 'BNB', 'X', 'ADA', 'SOL'].map((symbol, i) => (
+//       <motion.div
+//         key={`symbol-${i}`}
+//         className="absolute text-5xl font-black text-orange-500/20 select-none pointer-events-none"
+//         style={{
+//           top: `${10 + Math.random() * 80}%`,
+//           left: `${5 + Math.random() * 90}%`,
+//         }}
+//         animate={{
+//           y: [0, -40, 40, 0],
+//           rotate: [0, 10, -10, 0],
+//           opacity: [0.15, 0.35, 0.15],
+//         }}
+//         transition={{
+//           duration: 20 + i * 3,
+//           repeat: Infinity,
+//           ease: "easeInOut",
+//         }}
+//       >
+//         {symbol}
+//       </motion.div>
+//     ))}
+//   </div>
+
+//   {/* Main content - raised above background */}
+//   <div className="relative z-10 text-center max-w-6xl">
+//     <motion.div initial={{ opacity: 0, y: 60 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2 }}>
+//       <motion.h1
+//         className="text-7xl sm:text-9xl md:text-[10rem] lg:text-[12rem] font-black tracking-[-0.08em] mb-6 leading-none"
+//         animate={{
+//           textShadow: [
+//             '0 0 30px #f97316, 0 0 60px #f97316aa',
+//             '0 0 60px #fb923c, 0 0 120px #fb923caa',
+//             '0 0 30px #f97316, 0 0 60px #f97316aa',
+//           ],
+//         }}
+//         transition={{ duration: 8, repeat: Infinity, repeatType: 'reverse' }}
+//       >
+//         <span className="bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-orange-300 to-white">
+//           CREDENCE <span className="text-white">FLUX</span>
+//         </span>
+//       </motion.h1>
+
+//       <p className="text-2xl sm:text-3xl md:text-4xl text-white/90 mb-12 tracking-widest font-light">
+//         ROBOTIC EXECUTION ENGINE
+//         <br className="hidden sm:block" />
+//         <span className="text-orange-400 font-normal">— precision • flux • dominance</span>
+//       </p>
+
+//       <motion.div
+//         className="flex flex-col sm:flex-row gap-8 justify-center items-center"
+//         initial={{ opacity: 0, y: 40 }}
+//         animate={{ opacity: 1, y: 0 }}
+//         transition={{ delay: 0.7, duration: 1 }}
+//       >
+//         <motion.button
+//           onClick={handleGetStarted}
+//           className="px-16 py-6 text-sm sm:text-3xl font-black uppercase tracking-widest bg-gradient-to-r from-orange-600 to-orange-400 rounded-xl border-2 border-orange-300/60 shadow-2xl shadow-orange-900/80"
+//           whileHover={{ scale: 1.08, boxShadow: '0 0 80px #f97316, 0 0 120px #fb923c' }}
+//           whileTap={{ scale: 0.96 }}
+//         >
+//           Get started →
+//         </motion.button>
+
+//         <motion.a
+//           href="#market"
+//           className="text-orange-300 hover:text-white transition-colors text-xl underline underline-offset-8 decoration-orange-400/60"
+//         >
+//           observe live core →
+//         </motion.a>
+//       </motion.div>
+
+//       <p className="mt-12 text-orange-200/60 text-base sm:text-lg tracking-wide">
+//         24/7 UPTIME • NON-CUSTODIAL • QUANTUM SHIELD ACTIVE
+//       </p>
+//     </motion.div>
+//   </div>
+// </section>
+
+//       {/* Currency Pairs */}
+//       <section className="py-24 px-6 relative z-10 bg-gradient-to-b from-black to-gray-950">
+//         <div className="max-w-7xl mx-auto">
+//           <div className="text-center mb-16">
+//             <h2 className="text-5xl sm:text-6xl font-black text-orange-400 tracking-tighter mb-4">
+//               ACTIVE FLUX PAIRS
+//             </h2>
+//             <p className="text-xl text-white/70 max-w-3xl mx-auto">
+//               High-frequency channels • Instant liquidity vectors
+//             </p>
+//           </div>
+
+//           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-5">
+//             {pairs.map((item, i) => (
+//               <motion.div
+//                 key={item.pair}
+//                 className="p-6 bg-black/70 border border-orange-800/50 rounded-xl text-center backdrop-blur-md"
+//                 initial={{ opacity: 0, y: 50 }}
+//                 whileInView={{ opacity: 1, y: 0 }}
+//                 transition={{ delay: i * 0.1 }}
+//                 whileHover={{ borderColor: '#fb923c', boxShadow: '0 0 25px #f9731660' }}
+//               >
+//                 <div className="text-3xl font-black text-white mb-2">{item.pair}</div>
+//                 <div className="text-2xl font-bold" style={{ color: item.color }}>
+//                   {item.change}
+//                 </div>
+//               </motion.div>
+//             ))}
+//           </div>
+//         </div>
+//       </section>
+
+//       {/* Market Caps + Moving Charts */}
+//       <section className="py-24 px-6 bg-black relative z-10">
+//         <div className="max-w-7xl mx-auto">
+//           <div className="text-center mb-16">
+//             <h2 className="text-5xl sm:text-6xl font-black text-orange-400 tracking-tighter mb-4">
+//               LIVE MARKET CAP & MOVEMENT CORE
+//             </h2>
+//             <p className="text-xl text-white/70 max-w-3xl mx-auto">
+//               Total crypto flux + real-time price trajectories for dominant protocols
+//             </p>
+//           </div>
+
+//           {/* Total Market Cap Chart */}
+//           <div className="mb-16">
+//             <h3 className="text-3xl font-black text-orange-300 mb-6 text-center">
+//               TOTAL CRYPTO MARKET CAP (LIVE MOVEMENT)
+//             </h3>
+//             <div className="h-[400px] sm:h-[500px] rounded-2xl overflow-hidden border-2 border-orange-800/60 shadow-2xl shadow-orange-950/70">
+//               <AdvancedRealTimeChart
+//                 symbol="CRYPTOCAP:TOTAL"
+//                 theme="dark"
+//                 locale="en"
+//                 interval="1D"
+//                 timezone="Etc/UTC"
+//                 style="1"
+//                 toolbar_bg="#000000"
+//                 hide_side_toolbar={true}
+//                 allow_symbol_change={false}
+//                 save_image={false}
+//                 details={true}
+//                 hotlist={false}
+//                 calendar={false}
+//               />
+//             </div>
+//             <p className="text-center mt-4 text-orange-200/70 text-sm">
+//               Global crypto market cap trajectory • Real-time updates
+//             </p>
+//           </div>
+
+//           {/* Mini Charts Grid */}
+//           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+//             {marketCapsMini.map((coin, i) => (
+//               <motion.div
+//                 key={coin.symbol}
+//                 className="bg-black/70 border border-orange-800/50 rounded-2xl overflow-hidden backdrop-blur-md flex flex-col"
+//                 initial={{ opacity: 0, y: 40 }}
+//                 whileInView={{ opacity: 1, y: 0 }}
+//                 transition={{ delay: i * 0.15 }}
+//                 whileHover={{ borderColor: '#fb923c', boxShadow: '0 0 35px #f9731660' }}
+//               >
+//                 <div className="p-5 border-b border-orange-800/40">
+//                   <div className="flex justify-between items-center mb-2">
+//                     <div className="text-2xl font-black text-orange-400">#{i + 1}</div>
+//                     <div className="text-3xl text-white">{coin.symbol.split(':')[1]?.replace('USDT', '') || coin.name}</div>
+//                   </div>
+//                   <div className="text-xl font-bold text-white">{coin.name}</div>
+//                   <div className="text-base text-orange-200 mt-1">Market Cap: {coin.cap}</div>
+//                 </div>
+
+//                 <div className="flex-1 min-h-[220px]">
+//                   <MiniChart
+//                     symbol={coin.symbol}
+//                     colorTheme="dark"
+//                     locale="en"
+//                     isTransparent={false}
+//                     autosize
+//                     largeChartUrl={false}
+//                   />
+//                 </div>
+//               </motion.div>
+//             ))}
+//           </div>
+
+//           <p className="text-center mt-10 text-orange-200/60 text-base">
+//             Individual price movement charts • Live updates from exchange feeds
+//           </p>
+//         </div>
+//       </section>
+
+//       {/* Market Overview (secondary chart) */}
+//       <section id="market" className="py-24 px-6 bg-black relative z-10">
+//         <div className="max-w-7xl mx-auto">
+//           <div className="text-center mb-12">
+//             <h2 className="text-5xl sm:text-6xl font-black text-orange-400 tracking-tighter mb-4">
+//               DETAILED MARKET NEURAL CORE
+//             </h2>
+//             <p className="text-xl text-white/70 max-w-3xl mx-auto">
+//               Full top coins overview with live flux metrics
+//             </p>
+//           </div>
+
+//           <div className="flex flex-col items-center gap-6 mb-10">
+//             <div className="flex items-center gap-4 text-orange-300 text-xl font-medium">
+//               <motion.div
+//                 className="w-5 h-5 rounded-full bg-green-400 shadow-lg shadow-green-400/60"
+//                 animate={{ scale: [1, 1.6, 1] }}
+//                 transition={{ duration: 2, repeat: Infinity }}
+//               />
+//               LIVE STREAM PROTOCOL ACTIVE
+//             </div>
+//           </div>
+
+//           <div className="h-[600px] rounded-2xl overflow-hidden border-2 border-orange-800/60 shadow-2xl shadow-orange-950/70">
+//             <MarketOverview
+//               colorTheme="dark"
+//               height="100%"
+//               width="100%"
+//               showFloatingTooltip
+//               locale="en"
+//             />
+//           </div>
+//         </div>
+//       </section>
+
+//       {/* Steps Carousel */}
+//       <section className="py-24 px-6 bg-gradient-to-b from-gray-950 to-black relative z-10">
+//         <div className="max-w-7xl mx-auto">
+//           <div className="text-center mb-16">
+//             <h2 className="text-5xl sm:text-6xl font-black text-orange-400 tracking-tighter mb-4">
+//               NODE ACTIVATION SEQUENCE
+//             </h2>
+//             <p className="text-xl text-white/70 max-w-3xl mx-auto">
+//               5-phase protocol • Minimal latency onboarding
+//             </p>
+//           </div>
+
+//           <div className="relative overflow-hidden pb-6">
+//             <motion.div
+//               className="flex gap-6"
+//               animate={{ x: [0, -2200] }}
+//               transition={{ duration: 55, repeat: Infinity, ease: 'linear' }}
+//             >
+//               {[...steps, ...steps].map((step, i) => (
+//                 <motion.div
+//                   key={i}
+//                   className="min-w-[340px] p-8 bg-black/75 border border-orange-800/50 rounded-2xl backdrop-blur-md text-center"
+//                   whileHover={{ scale: 1.05, borderColor: '#fb923c', boxShadow: '0 0 40px #f9731660' }}
+//                 >
+//                   <div className="text-7xl mb-6 text-orange-400 drop-shadow-lg">{step.icon}</div>
+//                   <div className="text-4xl font-black text-orange-300 mb-4">
+//                     PHASE {step.number}
+//                   </div>
+//                   <div className="text-2xl font-bold text-white mb-4">{step.title}</div>
+//                   <p className="text-white/80 text-base leading-relaxed">{step.desc}</p>
+//                 </motion.div>
+//               ))}
+//             </motion.div>
+//           </div>
+//         </div>
+//       </section>
+
+//       {/* Elite Operators */}
+//       <section className="py-24 px-6 bg-gradient-to-b from-black to-gray-950 relative z-10">
+//         <div className="max-w-7xl mx-auto">
+//           <div className="text-center mb-16">
+//             <h2 className="text-5xl sm:text-6xl font-black text-orange-400 tracking-tighter mb-4">
+//               ELITE EXECUTION UNITS
+//             </h2>
+//             <p className="text-xl text-white/70 max-w-3xl mx-auto">
+//               Top flux operators • Proven performance matrix
+//             </p>
+//           </div>
+
+//           <div className="relative overflow-hidden pb-6">
+//             <motion.div
+//               className="flex gap-6"
+//               animate={{ x: [0, -3200] }}
+//               transition={{ duration: 70, repeat: Infinity, ease: 'linear' }}
+//             >
+//               {[...topTraders, ...topTraders].map((trader, i) => (
+//                 <motion.div
+//                   key={`${trader.name}-${i}`}
+//                   className="min-w-[340px] p-6 bg-black/75 border border-orange-800/50 rounded-2xl backdrop-blur-md"
+//                   whileHover={{ scale: 1.05, borderColor: '#fb923c', boxShadow: '0 0 40px #f9731660' }}
+//                 >
+//                   <div className="text-7xl mb-6 text-center text-orange-400 drop-shadow-lg">{trader.avatar}</div>
+//                   <div className="text-2xl font-black text-white text-center mb-3">
+//                     UNIT #{trader.rank} • {trader.name}
+//                   </div>
+//                   <div className="text-center text-xl">
+//                     <span className="text-green-400 font-bold">{trader.profit}</span>
+//                     <span className="text-white/60 block mt-2">({trader.trades} operations)</span>
+//                   </div>
+//                 </motion.div>
+//               ))}
+//             </motion.div>
+//           </div>
+//         </div>
+//       </section>
+
+//       {/* Network Transactions */}
+//       <section className="py-24 px-6 bg-black relative z-10">
+//         <div className="max-w-5xl mx-auto">
+//           <div className="text-center mb-16">
+//             <h2 className="text-5xl sm:text-6xl font-black text-orange-400 tracking-tighter mb-4">
+//               LIVE TRANSACTION LOG
+//             </h2>
+//             <p className="text-xl text-white/70">
+//               Real-time flux movements • Node activity stream
+//             </p>
+//           </div>
+
+//           <div className="space-y-5 max-h-[560px] overflow-hidden relative">
+//             <motion.div
+//               className="space-y-5"
+//               animate={{ y: [0, -700] }}
+//               transition={{ duration: 32, repeat: Infinity, ease: 'linear' }}
+//             >
+//               {[...recentPayments, ...recentPayments].map((tx, i) => (
+//                 <motion.div
+//                   key={i}
+//                   className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-6 bg-gray-950/80 border border-orange-800/50 rounded-xl"
+//                   initial={{ opacity: 0, x: -50 }}
+//                   animate={{ opacity: 1, x: 0 }}
+//                   transition={{ delay: i * 0.15 }}
+//                 >
+//                   <div>
+//                     <div className="text-orange-300 font-bold text-xl">{tx.user}</div>
+//                     <div className="text-white/50 text-sm mt-1">{tx.time}</div>
+//                   </div>
+//                   <div className="text-right mt-3 sm:mt-0">
+//                     <div className="text-2xl font-bold text-white">{tx.amount}</div>
+//                     <div className="text-sm text-orange-400/80 mt-1">{tx.type}</div>
+//                   </div>
+//                 </motion.div>
+//               ))}
+//             </motion.div>
+//             <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black pointer-events-none" />
+//           </div>
+//         </div>
+//       </section>
+
+//       {/* Final CTA */}
+//       <section className="min-h-[90vh] flex items-center justify-center relative z-10 px-6 py-24 bg-gradient-to-t from-black to-gray-950">
+//         <div className="text-center max-w-5xl">
+//           <motion.h2
+//             className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black mb-12 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-orange-300 to-white"
+//             animate={{
+//               textShadow: [
+//                 '0 0 60px #f97316, 0 0 120px #fb923c',
+//                 '0 0 100px #f97316, 0 0 180px #fb923c',
+//                 '0 0 60px #f97316, 0 0 120px #fb923c',
+//               ],
+//             }}
+//             transition={{ duration: 6, repeat: Infinity, repeatType: 'reverse' }}
+//           >
+//             INITIALIZE FLUX ACCESS
+//           </motion.h2>
+
+//           <p className="text-2xl sm:text-3xl text-white/90 mb-16 max-w-4xl mx-auto leading-relaxed">
+//             No intermediaries. Pure execution layer.
+//             <br className="hidden sm:block" />
+//             <span className="text-orange-400 font-semibold">Deploy your node now.</span>
+//           </p>
+
+//           <motion.button
+//             onClick={handleGetStarted}
+//             className="px-20 sm:px-32 py-2 sm:py-10 text-xl sm:text-4xl font-black uppercase bg-gradient-to-r from-orange-600 via-orange-500 to-orange-400 rounded-2xl border-2 border-orange-300/60 shadow-2xl shadow-orange-900/90"
+//             whileHover={{ scale: 1.1, boxShadow: '0 0 120px #f97316, 0 0 180px #fb923c' }}
+//             whileTap={{ scale: 0.95 }}
+//           >
+//             EXECUTE → SIGNUP
+//           </motion.button>
+
+//           <p className="mt-12 text-orange-200/70 text-xl tracking-wide">
+//             90-second bootstrap • Anonymous mode available • Minimum vector: $50
+//           </p>
+//         </div>
+//       </section>
+//     </div>
+//   );
+// };
+
+// export default GetStarted;
+
+
+
+
+
+
+import React, { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import {
   MarketOverview,
   MiniChart,
   AdvancedRealTimeChart,
 } from 'react-ts-tradingview-widgets';
+import { XMarkIcon, GiftIcon } from '@heroicons/react/24/solid';
 
+// Data Arrays
 const pairs = [
   { pair: 'BTC/USDT', change: '+4.82%', color: '#fbbf24' },
   { pair: 'ETH/USDT', change: '-1.34%', color: '#f97316' },
@@ -899,502 +1472,205 @@ const steps = [
 
 const GetStarted = () => {
   const navigate = useNavigate();
+  const [showReferPopup, setShowReferPopup] = useState(false);
+
   const handleGetStarted = () => navigate('/signup');
+
+  // Popup logic: Triggers every 60 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setShowReferPopup(true);
+    }, 10000); 
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden relative font-mono">
-      {/* Circuit grid */}
+      
+      {/* Referral Popup Modal */}
+      <AnimatePresence>
+        {showReferPopup && (
+          <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm">
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              className="bg-gray-950 border border-orange-500/50 rounded-2xl p-8 max-w-sm w-full shadow-[0_0_40px_rgba(249,115,22,0.2)] relative"
+            >
+              <button 
+                onClick={() => setShowReferPopup(false)}
+                className="absolute top-4 right-4 text-gray-500 hover:text-orange-500 transition-colors"
+              >
+                <XMarkIcon className="w-6 h-6" />
+              </button>
+              
+              <div className="text-center space-y-6">
+                <div className="bg-orange-500/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto border border-orange-500/30">
+                  <GiftIcon className="w-10 h-10 text-orange-500" />
+                </div>
+                <h3 className="text-2xl font-black tracking-tight uppercase">Protocol <span className="text-orange-500">Incentive</span></h3>
+                <p className="text-gray-400 text-sm">
+                  Expand the Credence Flux network. Refer <span className="text-orange-500 font-bold">five friends</span> and earn automated trade bonuses.
+                </p>
+                <button
+                  onClick={() => {
+                    setShowReferPopup(false);
+                    navigate('/signup');
+                  }}
+                  className="w-full bg-orange-600 hover:bg-orange-500 text-white font-bold py-4 rounded-xl transition shadow-lg shadow-orange-600/20 uppercase tracking-widest text-xs"
+                >
+                  Initialize Referral Mode
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Background FX */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f0f0f_1px,transparent_1px),linear-gradient(to_bottom,#0f0f0f_1px,transparent_1px)] bg-[size:60px_60px] opacity-70" />
       </div>
 
-      {/* Orange scan line */}
       <motion.div
-        className="fixed inset-0 pointer-events-none bg-gradient-to-b from-transparent via-orange-500/30 to-transparent blur-md z-50"
+        className="fixed inset-0 pointer-events-none bg-gradient-to-b from-transparent via-orange-500/20 to-transparent blur-md z-50"
         animate={{ y: ['-150%', '150%'] }}
         transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}
       />
 
       {/* Hero Section */}
-      {/* <section className="min-h-screen flex items-center justify-center relative z-10 px-6 py-16">
-        <div className="text-center max-w-6xl">
-          <motion.div initial={{ opacity: 0, y: 60 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2 }}>
-            <motion.h1
-              className="text-7xl sm:text-9xl md:text-[10rem] lg:text-[12rem] font-black tracking-[-0.08em] mb-6 leading-none"
-              animate={{
-                textShadow: [
-                  '0 0 30px #f97316, 0 0 60px #f97316aa',
-                  '0 0 60px #fb923c, 0 0 120px #fb923caa',
-                  '0 0 30px #f97316, 0 0 60px #f97316aa',
-                ],
-              }}
-              transition={{ duration: 8, repeat: Infinity, repeatType: 'reverse' }}
-            >
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-orange-300 to-white">
-                CREDENCE <span className='text-white'>FLUX</span>
-              </span>
-            </motion.h1>
+      <section className="min-h-screen flex items-center justify-center relative z-10 px-6 py-16 overflow-hidden">
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-950 to-black opacity-95" />
+          {[...Array(12)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-3 h-3 rounded-full bg-orange-500/40 blur-sm"
+              style={{ top: `${Math.random() * 100}%`, left: `${Math.random() * 100}%` }}
+              animate={{ y: [0, -80, 0], opacity: [0.3, 0.7, 0.3] }}
+              transition={{ duration: 10 + Math.random() * 5, repeat: Infinity }}
+            />
+          ))}
+        </div>
 
-            <p className="text-2xl sm:text-3xl md:text-4xl text-white/90 mb-12 tracking-widest font-light">
-              ROBOTIC EXECUTION ENGINE
-              <br className="hidden sm:block" />
-              <span className="text-orange-400 font-normal">— precision • flux • dominance</span>
+        <div className="relative z-10 text-center max-w-6xl">
+          <motion.div initial={{ opacity: 0, y: 60 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2 }}>
+            <h1 className="text-7xl sm:text-9xl md:text-[10rem] font-black tracking-[-0.08em] mb-6 leading-none">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-orange-300 to-white">
+                CREDENCE <span className="text-white">FLUX</span>
+              </span>
+            </h1>
+            <p className="text-xl sm:text-2xl text-white/90 mb-12 tracking-widest font-light">
+              ROBOTIC EXECUTION ENGINE <span className="text-orange-400">— dominance • precision</span>
             </p>
 
-            <motion.div
-              className="flex flex-col sm:flex-row gap-8 justify-center items-center"
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7, duration: 1 }}
-            >
+            <div className="flex flex-col sm:flex-row gap-8 justify-center items-center">
               <motion.button
                 onClick={handleGetStarted}
-                className="px-16 py-6 text-2xl sm:text-3xl font-black uppercase tracking-widest bg-gradient-to-r from-orange-600 to-orange-400 rounded-xl border-2 border-orange-300/60 shadow-2xl shadow-orange-900/80"
-                whileHover={{ scale: 1.08, boxShadow: '0 0 80px #f97316, 0 0 120px #fb923c' }}
-                whileTap={{ scale: 0.96 }}
+                className="px-12 py-5 text-xl font-black uppercase tracking-widest bg-orange-600 rounded-xl border-2 border-orange-400 shadow-2xl shadow-orange-900/50"
+                whileHover={{ scale: 1.05 }}
               >
-                ACTIVATE NODE →
+                Get Started →
               </motion.button>
-
-              <motion.a
-                href="#market"
-                className="text-orange-300 hover:text-white transition-colors text-xl underline underline-offset-8 decoration-orange-400/60"
-              >
-                observe live core →
-              </motion.a>
-            </motion.div>
-
-            <p className="mt-12 text-orange-200/60 text-base sm:text-lg tracking-wide">
-              24/7 UPTIME • NON-CUSTODIAL • QUANTUM SHIELD ACTIVE
-            </p>
+              <a href="#market" className="text-orange-300 hover:text-white underline underline-offset-8">observe live core →</a>
+            </div>
           </motion.div>
         </div>
-      </section> */}
+      </section>
 
-      <section className="min-h-screen flex items-center justify-center relative z-10 px-6 py-16 overflow-hidden">
-  {/* Crypto Background Layers */}
-  <div className="absolute inset-0 z-0 pointer-events-none">
-    {/* Dark base gradient with crypto feel */}
-    <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-950 to-black opacity-95" />
+      {/* Active Flux Pairs */}
+      <section className="py-24 px-6 bg-black">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-6 gap-5">
+          {pairs.map((item, i) => (
+            <motion.div
+              key={item.pair}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.1 }}
+              className="p-6 bg-gray-950 border border-orange-900/30 rounded-xl text-center"
+            >
+              <div className="text-2xl font-bold text-white mb-2">{item.pair}</div>
+              <div className="text-xl font-bold" style={{ color: item.color }}>{item.change}</div>
+            </motion.div>
+          ))}
+        </div>
+      </section>
 
-    {/* Subtle crypto grid / circuit pattern */}
-    <div
-      className="absolute inset-0 opacity-30"
-      style={{
-        backgroundImage: `
-          radial-gradient(circle at 10% 20%, rgba(251, 191, 36, 0.08) 0%, transparent 50%),
-          radial-gradient(circle at 90% 80%, rgba(249, 115, 22, 0.06) 0%, transparent 50%),
-          linear-gradient(to right, #0f0f0f 1px, transparent 1px),
-          linear-gradient(to bottom, #0f0f0f 1px, transparent 1px)
-        `,
-        backgroundSize: '100px 100px, 100px 100px, 40px 40px, 40px 40px',
-      }}
-    />
-
-    {/* Floating crypto particles / orbs */}
-    {[...Array(12)].map((_, i) => (
-      <motion.div
-        key={i}
-        className="absolute w-3 h-3 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 blur-sm opacity-40"
-        style={{
-          top: `${Math.random() * 100}%`,
-          left: `${Math.random() * 100}%`,
-        }}
-        animate={{
-          y: [0, -80, 0],
-          x: [0, Math.random() * 60 - 30, 0],
-          scale: [1, 1.6, 1],
-          opacity: [0.3, 0.7, 0.3],
-        }}
-        transition={{
-          duration: 12 + Math.random() * 10,
-          repeat: Infinity,
-          delay: i * 0.8,
-          ease: "easeInOut",
-        }}
-      />
-    ))}
-
-    {/* Very faint floating crypto symbols */}
-    {['₿', 'Ξ', 'S', 'BNB', 'X', 'ADA', 'SOL'].map((symbol, i) => (
-      <motion.div
-        key={`symbol-${i}`}
-        className="absolute text-5xl font-black text-orange-500/20 select-none pointer-events-none"
-        style={{
-          top: `${10 + Math.random() * 80}%`,
-          left: `${5 + Math.random() * 90}%`,
-        }}
-        animate={{
-          y: [0, -40, 40, 0],
-          rotate: [0, 10, -10, 0],
-          opacity: [0.15, 0.35, 0.15],
-        }}
-        transition={{
-          duration: 20 + i * 3,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      >
-        {symbol}
-      </motion.div>
-    ))}
-  </div>
-
-  {/* Main content - raised above background */}
-  <div className="relative z-10 text-center max-w-6xl">
-    <motion.div initial={{ opacity: 0, y: 60 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2 }}>
-      <motion.h1
-        className="text-7xl sm:text-9xl md:text-[10rem] lg:text-[12rem] font-black tracking-[-0.08em] mb-6 leading-none"
-        animate={{
-          textShadow: [
-            '0 0 30px #f97316, 0 0 60px #f97316aa',
-            '0 0 60px #fb923c, 0 0 120px #fb923caa',
-            '0 0 30px #f97316, 0 0 60px #f97316aa',
-          ],
-        }}
-        transition={{ duration: 8, repeat: Infinity, repeatType: 'reverse' }}
-      >
-        <span className="bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-orange-300 to-white">
-          CREDENCE <span className="text-white">FLUX</span>
-        </span>
-      </motion.h1>
-
-      <p className="text-2xl sm:text-3xl md:text-4xl text-white/90 mb-12 tracking-widest font-light">
-        ROBOTIC EXECUTION ENGINE
-        <br className="hidden sm:block" />
-        <span className="text-orange-400 font-normal">— precision • flux • dominance</span>
-      </p>
-
-      <motion.div
-        className="flex flex-col sm:flex-row gap-8 justify-center items-center"
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.7, duration: 1 }}
-      >
-        <motion.button
-          onClick={handleGetStarted}
-          className="px-16 py-6 text-sm sm:text-3xl font-black uppercase tracking-widest bg-gradient-to-r from-orange-600 to-orange-400 rounded-xl border-2 border-orange-300/60 shadow-2xl shadow-orange-900/80"
-          whileHover={{ scale: 1.08, boxShadow: '0 0 80px #f97316, 0 0 120px #fb923c' }}
-          whileTap={{ scale: 0.96 }}
-        >
-          Get started →
-        </motion.button>
-
-        <motion.a
-          href="#market"
-          className="text-orange-300 hover:text-white transition-colors text-xl underline underline-offset-8 decoration-orange-400/60"
-        >
-          observe live core →
-        </motion.a>
-      </motion.div>
-
-      <p className="mt-12 text-orange-200/60 text-base sm:text-lg tracking-wide">
-        24/7 UPTIME • NON-CUSTODIAL • QUANTUM SHIELD ACTIVE
-      </p>
-    </motion.div>
-  </div>
-</section>
-
-      {/* Currency Pairs */}
-      <section className="py-24 px-6 relative z-10 bg-gradient-to-b from-black to-gray-950">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl sm:text-6xl font-black text-orange-400 tracking-tighter mb-4">
-              ACTIVE FLUX PAIRS
-            </h2>
-            <p className="text-xl text-white/70 max-w-3xl mx-auto">
-              High-frequency channels • Instant liquidity vectors
-            </p>
+      {/* Market Charts */}
+      <section id="market" className="py-24 px-6 bg-gray-950">
+        <div className="max-w-7xl mx-auto space-y-16">
+          <div className="h-[500px] border-2 border-orange-800/40 rounded-2xl overflow-hidden">
+            <AdvancedRealTimeChart symbol="CRYPTOCAP:TOTAL" theme="dark" autosize hide_side_toolbar />
           </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-5">
-            {pairs.map((item, i) => (
-              <motion.div
-                key={item.pair}
-                className="p-6 bg-black/70 border border-orange-800/50 rounded-xl text-center backdrop-blur-md"
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-                whileHover={{ borderColor: '#fb923c', boxShadow: '0 0 25px #f9731660' }}
-              >
-                <div className="text-3xl font-black text-white mb-2">{item.pair}</div>
-                <div className="text-2xl font-bold" style={{ color: item.color }}>
-                  {item.change}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {marketCapsMini.map((coin) => (
+              <div key={coin.symbol} className="bg-black border border-orange-900/30 rounded-2xl p-5 h-80">
+                <div className="mb-4">
+                  <h4 className="text-xl font-bold text-orange-400">{coin.name}</h4>
+                  <p className="text-xs text-gray-500">CAP: {coin.cap}</p>
                 </div>
-              </motion.div>
+                <MiniChart symbol={coin.symbol} colorTheme="dark" autosize />
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Market Caps + Moving Charts */}
-      <section className="py-24 px-6 bg-black relative z-10">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl sm:text-6xl font-black text-orange-400 tracking-tighter mb-4">
-              LIVE MARKET CAP & MOVEMENT CORE
-            </h2>
-            <p className="text-xl text-white/70 max-w-3xl mx-auto">
-              Total crypto flux + real-time price trajectories for dominant protocols
-            </p>
-          </div>
+      {/* Detailed Market Overview */}
+      <section className="py-24 px-6 bg-black">
+        <div className="max-w-7xl mx-auto h-[600px] border border-orange-900/30 rounded-2xl overflow-hidden">
+          <MarketOverview colorTheme="dark" height="100%" width="100%" />
+        </div>
+      </section>
 
-          {/* Total Market Cap Chart */}
-          <div className="mb-16">
-            <h3 className="text-3xl font-black text-orange-300 mb-6 text-center">
-              TOTAL CRYPTO MARKET CAP (LIVE MOVEMENT)
-            </h3>
-            <div className="h-[400px] sm:h-[500px] rounded-2xl overflow-hidden border-2 border-orange-800/60 shadow-2xl shadow-orange-950/70">
-              <AdvancedRealTimeChart
-                symbol="CRYPTOCAP:TOTAL"
-                theme="dark"
-                locale="en"
-                interval="1D"
-                timezone="Etc/UTC"
-                style="1"
-                toolbar_bg="#000000"
-                hide_side_toolbar={true}
-                allow_symbol_change={false}
-                save_image={false}
-                details={true}
-                hotlist={false}
-                calendar={false}
-              />
+      {/* Step Sequence */}
+      <section className="py-24 overflow-hidden bg-gray-950">
+        <motion.div 
+          className="flex gap-8 px-6"
+          animate={{ x: [0, -1000] }}
+          transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+        >
+          {[...steps, ...steps].map((step, i) => (
+            <div key={i} className="min-w-[300px] p-8 bg-black border border-orange-900/30 rounded-2xl">
+              <div className="text-5xl mb-4">{step.icon}</div>
+              <h4 className="text-xl font-black text-orange-400 mb-2">PHASE {step.number}</h4>
+              <p className="text-sm text-gray-400">{step.desc}</p>
             </div>
-            <p className="text-center mt-4 text-orange-200/70 text-sm">
-              Global crypto market cap trajectory • Real-time updates
-            </p>
-          </div>
+          ))}
+        </motion.div>
+      </section>
 
-          {/* Mini Charts Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {marketCapsMini.map((coin, i) => (
-              <motion.div
-                key={coin.symbol}
-                className="bg-black/70 border border-orange-800/50 rounded-2xl overflow-hidden backdrop-blur-md flex flex-col"
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.15 }}
-                whileHover={{ borderColor: '#fb923c', boxShadow: '0 0 35px #f9731660' }}
-              >
-                <div className="p-5 border-b border-orange-800/40">
-                  <div className="flex justify-between items-center mb-2">
-                    <div className="text-2xl font-black text-orange-400">#{i + 1}</div>
-                    <div className="text-3xl text-white">{coin.symbol.split(':')[1]?.replace('USDT', '') || coin.name}</div>
-                  </div>
-                  <div className="text-xl font-bold text-white">{coin.name}</div>
-                  <div className="text-base text-orange-200 mt-1">Market Cap: {coin.cap}</div>
+      {/* Operators & Transactions */}
+      <section className="py-24 px-6 bg-black">
+        <div className="max-w-5xl mx-auto space-y-12">
+          <h2 className="text-4xl font-black text-center text-orange-500 uppercase">Live Node Activity</h2>
+          <div className="space-y-4">
+            {recentPayments.map((tx, i) => (
+              <div key={i} className="flex justify-between items-center p-6 bg-gray-950 border border-orange-900/20 rounded-xl">
+                <div>
+                  <div className="text-orange-300 font-bold">{tx.user}</div>
+                  <div className="text-xs text-gray-600">{tx.time}</div>
                 </div>
-
-                <div className="flex-1 min-h-[220px]">
-                  <MiniChart
-                    symbol={coin.symbol}
-                    colorTheme="dark"
-                    locale="en"
-                    isTransparent={false}
-                    autosize
-                    largeChartUrl={false}
-                  />
+                <div className="text-right">
+                  <div className="text-lg font-bold">{tx.amount}</div>
+                  <div className="text-xs text-orange-500 uppercase">{tx.type}</div>
                 </div>
-              </motion.div>
+              </div>
             ))}
-          </div>
-
-          <p className="text-center mt-10 text-orange-200/60 text-base">
-            Individual price movement charts • Live updates from exchange feeds
-          </p>
-        </div>
-      </section>
-
-      {/* Market Overview (secondary chart) */}
-      <section id="market" className="py-24 px-6 bg-black relative z-10">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-5xl sm:text-6xl font-black text-orange-400 tracking-tighter mb-4">
-              DETAILED MARKET NEURAL CORE
-            </h2>
-            <p className="text-xl text-white/70 max-w-3xl mx-auto">
-              Full top coins overview with live flux metrics
-            </p>
-          </div>
-
-          <div className="flex flex-col items-center gap-6 mb-10">
-            <div className="flex items-center gap-4 text-orange-300 text-xl font-medium">
-              <motion.div
-                className="w-5 h-5 rounded-full bg-green-400 shadow-lg shadow-green-400/60"
-                animate={{ scale: [1, 1.6, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              />
-              LIVE STREAM PROTOCOL ACTIVE
-            </div>
-          </div>
-
-          <div className="h-[600px] rounded-2xl overflow-hidden border-2 border-orange-800/60 shadow-2xl shadow-orange-950/70">
-            <MarketOverview
-              colorTheme="dark"
-              height="100%"
-              width="100%"
-              showFloatingTooltip
-              locale="en"
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* Steps Carousel */}
-      <section className="py-24 px-6 bg-gradient-to-b from-gray-950 to-black relative z-10">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl sm:text-6xl font-black text-orange-400 tracking-tighter mb-4">
-              NODE ACTIVATION SEQUENCE
-            </h2>
-            <p className="text-xl text-white/70 max-w-3xl mx-auto">
-              5-phase protocol • Minimal latency onboarding
-            </p>
-          </div>
-
-          <div className="relative overflow-hidden pb-6">
-            <motion.div
-              className="flex gap-6"
-              animate={{ x: [0, -2200] }}
-              transition={{ duration: 55, repeat: Infinity, ease: 'linear' }}
-            >
-              {[...steps, ...steps].map((step, i) => (
-                <motion.div
-                  key={i}
-                  className="min-w-[340px] p-8 bg-black/75 border border-orange-800/50 rounded-2xl backdrop-blur-md text-center"
-                  whileHover={{ scale: 1.05, borderColor: '#fb923c', boxShadow: '0 0 40px #f9731660' }}
-                >
-                  <div className="text-7xl mb-6 text-orange-400 drop-shadow-lg">{step.icon}</div>
-                  <div className="text-4xl font-black text-orange-300 mb-4">
-                    PHASE {step.number}
-                  </div>
-                  <div className="text-2xl font-bold text-white mb-4">{step.title}</div>
-                  <p className="text-white/80 text-base leading-relaxed">{step.desc}</p>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Elite Operators */}
-      <section className="py-24 px-6 bg-gradient-to-b from-black to-gray-950 relative z-10">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl sm:text-6xl font-black text-orange-400 tracking-tighter mb-4">
-              ELITE EXECUTION UNITS
-            </h2>
-            <p className="text-xl text-white/70 max-w-3xl mx-auto">
-              Top flux operators • Proven performance matrix
-            </p>
-          </div>
-
-          <div className="relative overflow-hidden pb-6">
-            <motion.div
-              className="flex gap-6"
-              animate={{ x: [0, -3200] }}
-              transition={{ duration: 70, repeat: Infinity, ease: 'linear' }}
-            >
-              {[...topTraders, ...topTraders].map((trader, i) => (
-                <motion.div
-                  key={`${trader.name}-${i}`}
-                  className="min-w-[340px] p-6 bg-black/75 border border-orange-800/50 rounded-2xl backdrop-blur-md"
-                  whileHover={{ scale: 1.05, borderColor: '#fb923c', boxShadow: '0 0 40px #f9731660' }}
-                >
-                  <div className="text-7xl mb-6 text-center text-orange-400 drop-shadow-lg">{trader.avatar}</div>
-                  <div className="text-2xl font-black text-white text-center mb-3">
-                    UNIT #{trader.rank} • {trader.name}
-                  </div>
-                  <div className="text-center text-xl">
-                    <span className="text-green-400 font-bold">{trader.profit}</span>
-                    <span className="text-white/60 block mt-2">({trader.trades} operations)</span>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Network Transactions */}
-      <section className="py-24 px-6 bg-black relative z-10">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl sm:text-6xl font-black text-orange-400 tracking-tighter mb-4">
-              LIVE TRANSACTION LOG
-            </h2>
-            <p className="text-xl text-white/70">
-              Real-time flux movements • Node activity stream
-            </p>
-          </div>
-
-          <div className="space-y-5 max-h-[560px] overflow-hidden relative">
-            <motion.div
-              className="space-y-5"
-              animate={{ y: [0, -700] }}
-              transition={{ duration: 32, repeat: Infinity, ease: 'linear' }}
-            >
-              {[...recentPayments, ...recentPayments].map((tx, i) => (
-                <motion.div
-                  key={i}
-                  className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-6 bg-gray-950/80 border border-orange-800/50 rounded-xl"
-                  initial={{ opacity: 0, x: -50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.15 }}
-                >
-                  <div>
-                    <div className="text-orange-300 font-bold text-xl">{tx.user}</div>
-                    <div className="text-white/50 text-sm mt-1">{tx.time}</div>
-                  </div>
-                  <div className="text-right mt-3 sm:mt-0">
-                    <div className="text-2xl font-bold text-white">{tx.amount}</div>
-                    <div className="text-sm text-orange-400/80 mt-1">{tx.type}</div>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-            <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black pointer-events-none" />
           </div>
         </div>
       </section>
 
       {/* Final CTA */}
-      <section className="min-h-[90vh] flex items-center justify-center relative z-10 px-6 py-24 bg-gradient-to-t from-black to-gray-950">
-        <div className="text-center max-w-5xl">
-          <motion.h2
-            className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black mb-12 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 via-orange-300 to-white"
-            animate={{
-              textShadow: [
-                '0 0 60px #f97316, 0 0 120px #fb923c',
-                '0 0 100px #f97316, 0 0 180px #fb923c',
-                '0 0 60px #f97316, 0 0 120px #fb923c',
-              ],
-            }}
-            transition={{ duration: 6, repeat: Infinity, repeatType: 'reverse' }}
-          >
-            INITIALIZE FLUX ACCESS
-          </motion.h2>
-
-          <p className="text-2xl sm:text-3xl text-white/90 mb-16 max-w-4xl mx-auto leading-relaxed">
-            No intermediaries. Pure execution layer.
-            <br className="hidden sm:block" />
-            <span className="text-orange-400 font-semibold">Deploy your node now.</span>
-          </p>
-
-          <motion.button
-            onClick={handleGetStarted}
-            className="px-20 sm:px-32 py-2 sm:py-10 text-xl sm:text-4xl font-black uppercase bg-gradient-to-r from-orange-600 via-orange-500 to-orange-400 rounded-2xl border-2 border-orange-300/60 shadow-2xl shadow-orange-900/90"
-            whileHover={{ scale: 1.1, boxShadow: '0 0 120px #f97316, 0 0 180px #fb923c' }}
-            whileTap={{ scale: 0.95 }}
-          >
-            EXECUTE → SIGNUP
-          </motion.button>
-
-          <p className="mt-12 text-orange-200/70 text-xl tracking-wide">
-            90-second bootstrap • Anonymous mode available • Minimum vector: $10
-          </p>
-        </div>
+      <section className="py-32 bg-gradient-to-t from-orange-900/20 to-black text-center px-6">
+        <h2 className="text-6xl md:text-8xl font-black mb-8 uppercase tracking-tighter italic">Initialize Access</h2>
+        <motion.button
+          onClick={handleGetStarted}
+          className="px-20 py-8 text-2xl font-black bg-orange-600 rounded-2xl shadow-[0_0_50px_rgba(234,88,12,0.4)]"
+          whileHover={{ scale: 1.1 }}
+        >
+          EXECUTE SIGNUP
+        </motion.button>
       </section>
     </div>
   );

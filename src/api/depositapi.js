@@ -87,26 +87,24 @@ export const getDepositById = async (id) => {
 };
 
 // tradingApi.js or depositapi.js — keep this version
-export const uploadReceipt = async (formData) => {
+// api/depositapi.js
+export const uploadReceipt = async (depositId, file) => {
+  const formData = new FormData();
+  formData.append('receipt', file);   // ← MUST match backend's upload.single('receipt')
+
   try {
-    const response = await apiClient.post(
-      "/api/trading/deposit/upload-receipt",
+    const response = await axios.post(
+      `/api/deposits/upload-receipt/${depositId}`,   // adjust endpoint if needed
       formData,
       {
         headers: {
-          "Content-Type": "multipart/form-data",
+          'Content-Type': 'multipart/form-data',
         },
       }
     );
-
-    console.log("uploadReceipt response:", response.data);
     return response.data;
-  } catch (err) {
-    console.error("uploadReceipt failed:", {
-      status: err.response?.status,
-      data: err.response?.data,
-      message: err.message,
-    });
-    throw err.response?.data || { message: "Upload failed", error: err };
+  } catch (error) {
+    console.error('Upload error:', error.response?.data || error);
+    throw error;
   }
 };

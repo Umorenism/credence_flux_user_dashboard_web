@@ -612,6 +612,198 @@
 
 
 
+// import React, { useEffect, useState } from "react";
+// import { Link, useNavigate } from "react-router-dom";
+// import {
+//   FiHome,
+//   FiCreditCard,
+//   FiArrowDownCircle,
+//   FiCornerRightDown,
+//   FiClock,
+//   FiUsers,
+//   FiShare2,
+//   FiHelpCircle,
+//   FiLogOut,
+// } from "react-icons/fi";
+// import { toast } from "react-toastify";
+// import { useTheme } from "./ui/ThemeContext";
+// import { userService } from "../api/userApi";
+// import logo from "../assets/flux2.svg";
+
+// export default function Sidebar({ isOpen, closeSidebar }) {
+//   const navigate = useNavigate();
+//   const { theme } = useTheme();
+//   const isDark = theme === "dark";
+
+//   const [user, setUser] = useState(() => {
+//     const saved = localStorage.getItem("user");
+//     return saved
+//       ? JSON.parse(saved)
+//       : { fullName: "", avatar: null, email: "", id: "" };
+//   });
+
+//   const [loading, setLoading] = useState(true);
+
+//   const loadProfile = async () => {
+//     const token = localStorage.getItem("token");
+//     if (!token) {
+//       setLoading(false);
+//       return;
+//     }
+
+//     try {
+//       const res = await userService.getProfile();
+//       if (res?.success && res.data) {
+//         const profile = {
+//           fullName: res.data.fullName || "",
+//           avatar: res.data.avatar || null,
+//           email: res.data.email || "",
+//           id: res.data.id || "",
+//         };
+//         setUser(profile);
+//         localStorage.setItem("user", JSON.stringify(profile));
+//       }
+//     } catch (err) {
+//       console.error("Failed to load profile:", err);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   useEffect(() => {
+//     loadProfile();
+//     const interval = setInterval(loadProfile, 120000);
+//     return () => clearInterval(interval);
+//   }, []);
+
+//   const handleLogout = () => {
+//     toast.success("Signed out successfully! 👋", {
+//       position: "top-center",
+//       autoClose: 2200,
+//       theme: isDark ? "dark" : "light",
+//     });
+
+//     setTimeout(() => {
+//       localStorage.removeItem("token");
+//       localStorage.removeItem("user");
+//       navigate("/signup");
+//     }, 900);
+//   };
+
+//   const navItems = [
+//     { to: "/home", icon: FiHome, label: "Dashboard" },
+//     { to: "/deposits", icon: FiCreditCard, label: "Deposits" },
+//     { to: "/withdraw", icon: FiArrowDownCircle, label: "Withdraw" },
+//     { to: "/crypto", icon: FiCornerRightDown, label: "Convert Crypto" },
+//     { to: "/transactions", icon: FiClock, label: "Transaction History" },
+//     { to: "/trade", icon: FiCornerRightDown, label: "Trade Now" },
+//     { to: "/join-trade", icon: FiUsers, label: "Join Trade" },
+//     { to: "/refer", icon: FiShare2, label: "Referrals" },
+//     { to: "/support", icon: FiHelpCircle, label: "Help & Support" },
+//   ];
+
+//   return (
+//     <>
+//       {/* Mobile overlay backdrop */}
+//       {isOpen && (
+//         <div
+//           className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] md:hidden"
+//           onClick={closeSidebar}
+//         />
+//       )}
+
+//       <aside
+//         className={`
+//           fixed inset-y-0 left-0 z-[70]
+//           w-72 sm:w-72 md:w-64 lg:w-72
+//           bg-white dark:bg-gray-950
+//           border-r border-gray-200 dark:border-gray-800
+//           transform transition-transform duration-300 ease-in-out
+//           ${isOpen ? "translate-x-0" : "-translate-x-full"}
+//           md:translate-x-0 md:relative md:shadow-none
+//           flex flex-col
+//           overflow-y-auto
+//         `}
+//       >
+//         {/* Logo Section */}
+//         <div className="px-5 pt-5 pb-2 border-b border-gray-200 dark:border-gray-800">
+//           <div className="h-16 w-full flex items-center justify-start overflow-hidden">
+//             <img
+//               src={logo}
+//               alt="CredenceFlux Logo"
+//               className="h-14 w-auto max-w-[280px] object-contain drop-shadow-xl cursor-pointer"
+//               onClick={() => navigate("/home")}
+//             />
+//           </div>
+//         </div>
+
+//         {/* Main Navigation */}
+//         <nav className="flex-1 px-3 pt-2 pb-4 space-y-1 relative z-10">
+//           {navItems.map((item) => (
+//             <Link
+//               key={item.to}
+//               to={item.to}
+//               onClick={() => {
+//                 closeSidebar();
+//               }}
+//               className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-orange-50 dark:hover:bg-gray-800/70 hover:text-orange-600 dark:hover:text-orange-400 transition-colors duration-200 font-medium text-[15px] md:text-base"
+//             >
+//               <item.icon className="w-5 h-5 flex-shrink-0" />
+//               <span>{item.label}</span>
+//             </Link>
+//           ))}
+//         </nav>
+
+//         {/* User Profile & Logout */}
+//         <div className="mt-auto border-t border-gray-200 dark:border-gray-800 p-5">
+//           <div
+//             className="flex items-center gap-3 p-3 rounded-xl cursor-pointer hover:bg-orange-50 dark:hover:bg-gray-800/50 transition-colors"
+//             onClick={() => {
+//               navigate("/profile");
+//               closeSidebar();
+//             }}
+//           >
+//             {loading ? (
+//               <div className="w-11 h-11 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse flex-shrink-0" />
+//             ) : user.avatar ? (
+//               <img
+//                 src={user.avatar}
+//                 alt="Profile"
+//                 className="w-11 h-11 rounded-full object-cover border-2 border-orange-500/30 flex-shrink-0"
+//                 onError={(e) => (e.target.src = "/default-avatar.png")}
+//               />
+//             ) : (
+//               <div className="w-11 h-11 rounded-full bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center text-white font-semibold text-xl flex-shrink-0">
+//                 {user.fullName?.charAt(0)?.toUpperCase() || "U"}
+//               </div>
+//             )}
+
+//             <div className="flex-1 min-w-0">
+//               <p className="font-semibold text-gray-900 dark:text-gray-100 truncate">
+//                 {loading ? "Loading..." : user.fullName || "User"}
+//               </p>
+//               <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+//                 {user.email || "View profile"}
+//               </p>
+//             </div>
+//           </div>
+
+//           <button
+//             onClick={handleLogout}
+//             className="mt-3 w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors font-medium"
+//           >
+//             <FiLogOut className="w-5 h-5" />
+//             <span>Sign Out</span>
+//           </button>
+//         </div>
+//       </aside>
+//     </>
+//   );
+// }
+
+
+
+
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -624,15 +816,18 @@ import {
   FiShare2,
   FiHelpCircle,
   FiLogOut,
+  FiSun,
+  FiMoon,
 } from "react-icons/fi";
 import { toast } from "react-toastify";
 import { useTheme } from "./ui/ThemeContext";
 import { userService } from "../api/userApi";
 import logo from "../assets/flux2.svg";
+import { motion } from "framer-motion";
 
 export default function Sidebar({ isOpen, closeSidebar }) {
   const navigate = useNavigate();
-  const { theme } = useTheme();
+  const { theme, toggleTheme } = useTheme(); // ← added toggleTheme
   const isDark = theme === "dark";
 
   const [user, setUser] = useState(() => {
@@ -753,6 +948,38 @@ export default function Sidebar({ isOpen, closeSidebar }) {
             </Link>
           ))}
         </nav>
+
+        {/* Theme Toggle – visible only on mobile */}
+        <div className="md:hidden px-5 py-3 border-t border-gray-200 dark:border-gray-800">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={toggleTheme}
+            className={`flex items-center justify-between w-full px-4 py-3 rounded-xl transition-colors
+              ${isDark ? "hover:bg-gray-800 text-yellow-300" : "hover:bg-gray-100 text-orange-600"}`}
+            aria-label="Toggle theme"
+          >
+            <div className="flex items-center gap-3">
+              {isDark ? (
+                <FiSun size={20} className="text-yellow-400" />
+              ) : (
+                <FiMoon size={20} className="text-orange-500" />
+              )}
+              <span className="font-medium text-gray-700 dark:text-gray-300">
+                {isDark ? "Light Mode" : "Dark Mode"}
+              </span>
+            </div>
+            <div
+              className={`w-10 h-5 flex items-center rounded-full p-1 transition-colors duration-300
+                ${isDark ? "bg-orange-600" : "bg-gray-400"}`}
+            >
+              <div
+                className={`w-4 h-4 rounded-full bg-white shadow-md transform transition-transform duration-300
+                  ${isDark ? "translate-x-5" : "translate-x-0"}`}
+              />
+            </div>
+          </motion.button>
+        </div>
 
         {/* User Profile & Logout */}
         <div className="mt-auto border-t border-gray-200 dark:border-gray-800 p-5">

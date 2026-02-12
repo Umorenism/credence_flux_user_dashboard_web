@@ -1,1239 +1,8 @@
 
 
 
-
-// import React, { useState, useEffect } from 'react';
-// import { motion } from 'framer-motion';
-// import { useNavigate } from 'react-router-dom';
-// import {
-//   BanknotesIcon,
-//   ArrowTrendingUpIcon,
-//   ArrowDownTrayIcon,
-//   ArrowUpTrayIcon,
-//   ChartBarIcon,
-// } from '@heroicons/react/24/solid';
-// import {
-//   LineChart,
-//   Line,
-//   XAxis,
-//   YAxis,
-//   CartesianGrid,
-//   Tooltip,
-//   ResponsiveContainer,
-// } from 'recharts';
-
-// import { userService } from '../../api/userApi';
-// import { useTheme } from '../ui/ThemeContext';
-
-// export default function Dashboard() {
-//   const navigate = useNavigate();
-//   const { theme } = useTheme();
-//   const isDark = theme === 'dark';
-
-//   const [loading, setLoading] = useState(true);
-//   const [profile, setProfile] = useState(null);
-//   const [dashboardData, setDashboardData] = useState(null);
-//   const [portfolioChart, setPortfolioChart] = useState([]);
-
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       try {
-//         setLoading(true);
-
-//         const profileRes = await userService.getProfile();
-//         const dashboardRes = await userService.getDashboard();
-
-//         if (profileRes.success && dashboardRes.success) {
-//           setProfile(profileRes.data);
-//           setDashboardData(dashboardRes.data);
-
-//           // Generate chart data for last 7 days
-//           const chart = [];
-//           for (let i = 6; i >= 0; i--) {
-//             const date = new Date();
-//             date.setDate(date.getDate() - i);
-//             const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-
-//             chart.push({
-//               date: dateStr,
-//               balance: dashboardRes.data.totalDeposited, // placeholder: could enhance with real daily balance
-//               profit: dashboardRes.data.totalEarnings,  // placeholder
-//             });
-//           }
-//           setPortfolioChart(chart);
-//         }
-//       } catch (err) {
-//         console.error(err);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchData();
-//   }, []);
-
-//   if (loading) {
-//     return (
-//       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
-//         <motion.div
-//           animate={{ rotate: 360 }}
-//           transition={{ repeat: Infinity, duration: 1.2, ease: 'linear' }}
-//           className="w-12 h-12 border-4 border-orange-600 border-t-transparent rounded-full"
-//         />
-//       </div>
-//     );
-//   }
-
-//   const formatMoney = (num) =>
-//     Number(num).toLocaleString('en-US', {
-//       minimumFractionDigits: 2,
-//       maximumFractionDigits: 2,
-//     });
-
-//   return (
-//     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 p-6 md:p-8">
-//       <div className="max-w-7xl mx-auto space-y-10">
-
-//         {/* Header */}
-//        <motion.h1
-//   initial={{ opacity: 0, y: -20 }}
-//   animate={{ opacity: 1, y: 0 }}
-//   className="text-3xl md:text-4xl font-bold text-orange-600"
-// >
-//   Welcome back, {profile ? profile.fullName.split(' ')[0] : 'User'}
-// </motion.h1>
-
-
-//         {/* Stats Cards */}
-//         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-//           {[
-//             {
-//               title: 'Account Balance',
-//               value: Object.values(profile.cryptoBalance || {}).reduce((a, b) => a + Number(b), 0),
-//               icon: BanknotesIcon,
-//               color: 'from-orange-600 to-orange-500',
-//             },
-//             {
-//               title: 'Total Earnings',
-//               value: dashboardData.totalEarnings,
-//               icon: ArrowTrendingUpIcon,
-//               color: 'from-emerald-600 to-emerald-500',
-//             },
-//             {
-//               title: 'Deposits',
-//               value: dashboardData.totalDeposited,
-//               icon: ArrowDownTrayIcon,
-//               color: 'from-blue-600 to-blue-500',
-//             },
-//             {
-//               title: 'Withdrawals',
-//               value: dashboardData.totalWithdrawn,
-//               icon: ArrowUpTrayIcon,
-//               color: 'from-red-600 to-red-500',
-//             },
-//           ].map((item, i) => (
-//             <motion.div
-//               key={item.title}
-//               initial={{ opacity: 0, y: 24 }}
-//               animate={{ opacity: 1, y: 0 }}
-//               transition={{ delay: i * 0.08 }}
-//               className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-md"
-//             >
-//               <div className={`inline-flex p-3 bg-gradient-to-br ${item.color} rounded-xl mb-4`}>
-//                 <item.icon className="w-7 h-7 text-white" />
-//               </div>
-//               <p className="text-sm text-gray-500">{item.title}</p>
-//               <p className="text-2xl font-bold">${formatMoney(item.value)}</p>
-//             </motion.div>
-//           ))}
-//         </div>
-
-//         {/* Action Buttons */}
-//         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-//           <button
-//             onClick={() => navigate('/deposits')}
-//             className="bg-gradient-to-r from-blue-600 to-blue-500 hover:opacity-90 text-white font-semibold py-4 rounded-xl shadow-md transition"
-//           >
-//             Deposit
-//           </button>
-
-//           <button
-//             onClick={() => navigate('/withdraw')}
-//             className="bg-gradient-to-r from-red-600 to-red-500 hover:opacity-90 text-white font-semibold py-4 rounded-xl shadow-md transition"
-//           >
-//             Withdraw
-//           </button>
-
-//           <button
-//             onClick={() => navigate('/trade')}
-//             className="bg-gradient-to-r from-orange-600 to-orange-500 hover:opacity-90 text-white font-semibold py-4 rounded-xl shadow-md transition"
-//           >
-//             Trade Now
-//           </button>
-//         </div>
-
-//         {/* Portfolio Chart */}
-//         <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-md">
-//           <h2 className="text-xl font-semibold text-orange-500 mb-6 flex items-center gap-2">
-//             <ChartBarIcon className="w-6 h-6" />
-//             Portfolio Growth
-//           </h2>
-
-//           <div className="h-72">
-//             <ResponsiveContainer width="100%" height="100%">
-//               <LineChart data={portfolioChart}>
-//                 <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#374151' : '#e5e7eb'} />
-//                 <XAxis dataKey="date" stroke="#9ca3af" />
-//                 <YAxis stroke="#9ca3af" />
-//                 <Tooltip />
-//                 <Line type="monotone" dataKey="balance" stroke="#f97316" strokeWidth={2} />
-//                 <Line type="monotone" dataKey="profit" stroke="#22c55e" strokeWidth={2} />
-//               </LineChart>
-//             </ResponsiveContainer>
-//           </div>
-//         </div>
-
-//         {/* Pending Transactions */}
-//         <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-md">
-//           <h2 className="text-xl font-semibold text-orange-500 mb-6">Pending Transactions</h2>
-//           {dashboardData.pendingDeposits + dashboardData.pendingWithdrawals === 0 ? (
-//             <p className="text-gray-500 dark:text-gray-400">No pending transactions</p>
-//           ) : (
-//             <div className="space-y-2">
-//               {dashboardData.pendingDeposits > 0 && (
-//                 <p className="text-blue-500">{dashboardData.pendingDeposits} deposit(s) pending</p>
-//               )}
-//               {dashboardData.pendingWithdrawals > 0 && (
-//                 <p className="text-red-500">{dashboardData.pendingWithdrawals} withdrawal(s) pending</p>
-//               )}
-//             </div>
-//           )}
-//         </div>
-
-//       </div>
-//     </div>
-//   );
-// }
-
-
-
-
-
-
-// import React, { useState, useEffect } from 'react';
-// import { motion } from 'framer-motion';
-// import { useNavigate } from 'react-router-dom';
-// import {
-//   BanknotesIcon,
-//   ArrowTrendingUpIcon,
-//   ArrowDownTrayIcon,
-//   ArrowUpTrayIcon,
-//   ChartBarIcon,
-// } from '@heroicons/react/24/solid';
-// import {
-//   LineChart,
-//   Line,
-//   XAxis,
-//   YAxis,
-//   CartesianGrid,
-//   Tooltip,
-//   ResponsiveContainer,
-// } from 'recharts';
-
-// import { userService } from '../../api/userApi';
-// import { useTheme } from '../ui/ThemeContext';
-
-// export default function Dashboard() {
-//   const navigate = useNavigate();
-//   const { theme } = useTheme();
-//   const isDark = theme === 'dark';
-
-//   const [loading, setLoading] = useState(true);
-//   const [profile, setProfile] = useState(null);
-//   const [dashboardData, setDashboardData] = useState(null);
-//   const [portfolioChart, setPortfolioChart] = useState([]);
-
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       try {
-//         setLoading(true);
-
-//         const profileRes = await userService.getProfile();
-//         const dashboardRes = await userService.getDashboard();
-
-//         if (profileRes?.success) setProfile(profileRes.data || {});
-//         if (dashboardRes?.success) setDashboardData(dashboardRes.data || {});
-
-//         // Generate chart data for last 7 days
-//         const chart = [];
-//         const totalBalance = dashboardRes?.data?.totalDeposited ?? 0;
-//         const totalProfit = dashboardRes?.data?.totalEarnings ?? 0;
-
-//         for (let i = 6; i >= 0; i--) {
-//           const date = new Date();
-//           date.setDate(date.getDate() - i);
-//           const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-
-//           chart.push({
-//             date: dateStr,
-//             balance: totalBalance,
-//             profit: totalProfit,
-//           });
-//         }
-//         setPortfolioChart(chart);
-//       } catch (err) {
-//         console.error('Dashboard fetch error:', err);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchData();
-//   }, []);
-
-//   if (loading || !profile || !dashboardData) {
-//     return (
-//       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
-//         <motion.div
-//           animate={{ rotate: 360 }}
-//           transition={{ repeat: Infinity, duration: 1.2, ease: 'linear' }}
-//           className="w-12 h-12 border-4 border-orange-600 border-t-transparent rounded-full"
-//         />
-//       </div>
-//     );
-//   }
-
-//   const formatMoney = (num) =>
-//     Number(num ?? 0).toLocaleString('en-US', {
-//       minimumFractionDigits: 2,
-//       maximumFractionDigits: 2,
-//     });
-
-//   return (
-//     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 p-6 md:p-8">
-//       <div className="max-w-7xl mx-auto space-y-10">
-//         {/* Header */}
-//         <motion.h1
-//           initial={{ opacity: 0, y: -20 }}
-//           animate={{ opacity: 1, y: 0 }}
-//           className="text-3xl md:text-4xl font-bold text-orange-600"
-//         >
-//           Welcome back, {profile?.fullName?.split(' ')[0] ?? 'User'}
-//         </motion.h1>
-
-//         {/* Stats Cards */}
-//         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-//           {[
-//             {
-//               title: 'Account Balance',
-//               value: Object.values(profile?.cryptoBalance || {}).reduce(
-//                 (a, b) => a + Number(b ?? 0),
-//                 0
-//               ),
-//               icon: BanknotesIcon,
-//               color: 'from-orange-600 to-orange-500',
-//             },
-//             {
-//               title: 'Total Earnings',
-//               value: dashboardData?.totalEarnings ?? 0,
-//               icon: ArrowTrendingUpIcon,
-//               color: 'from-emerald-600 to-emerald-500',
-//             },
-//             {
-//               title: 'Deposits',
-//               value: dashboardData?.totalDeposited ?? 0,
-//               icon: ArrowDownTrayIcon,
-//               color: 'from-blue-600 to-blue-500',
-//             },
-//             {
-//               title: 'Withdrawals',
-//               value: dashboardData?.totalWithdrawn ?? 0,
-//               icon: ArrowUpTrayIcon,
-//               color: 'from-red-600 to-red-500',
-//             },
-//           ].map((item, i) => (
-//             <motion.div
-//               key={item.title}
-//               initial={{ opacity: 0, y: 24 }}
-//               animate={{ opacity: 1, y: 0 }}
-//               transition={{ delay: i * 0.08 }}
-//               className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-md"
-//             >
-//               <div
-//                 className={`inline-flex p-3 bg-gradient-to-br ${item.color} rounded-xl mb-4`}
-//               >
-//                 <item.icon className="w-7 h-7 text-white" />
-//               </div>
-//               <p className="text-sm text-gray-500">{item.title}</p>
-//               <p className="text-2xl font-bold">${formatMoney(item.value)}</p>
-//             </motion.div>
-//           ))}
-//         </div>
-
-//         {/* Action Buttons */}
-//         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-//           <button
-//             onClick={() => navigate('/deposits')}
-//             className="bg-gradient-to-r from-blue-600 to-blue-500 hover:opacity-90 text-white font-semibold py-4 rounded-xl shadow-md transition"
-//           >
-//             Deposit
-//           </button>
-
-//           <button
-//             onClick={() => navigate('/withdraw')}
-//             className="bg-gradient-to-r from-red-600 to-red-500 hover:opacity-90 text-white font-semibold py-4 rounded-xl shadow-md transition"
-//           >
-//             Withdraw
-//           </button>
-
-//           <button
-//             onClick={() => navigate('/trade')}
-//             className="bg-gradient-to-r from-orange-600 to-orange-500 hover:opacity-90 text-white font-semibold py-4 rounded-xl shadow-md transition"
-//           >
-//             Trade Now
-//           </button>
-//         </div>
-
-//         {/* Portfolio Chart */}
-//         <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-md">
-//           <h2 className="text-xl font-semibold text-orange-500 mb-6 flex items-center gap-2">
-//             <ChartBarIcon className="w-6 h-6" />
-//             Portfolio Growth
-//           </h2>
-
-//           <div className="h-72">
-//             <ResponsiveContainer width="100%" height="100%">
-//               <LineChart data={portfolioChart}>
-//                 <CartesianGrid
-//                   strokeDasharray="3 3"
-//                   stroke={isDark ? '#374151' : '#e5e7eb'}
-//                 />
-//                 <XAxis dataKey="date" stroke="#9ca3af" />
-//                 <YAxis stroke="#9ca3af" />
-//                 <Tooltip />
-//                 <Line
-//                   type="monotone"
-//                   dataKey="balance"
-//                   stroke="#f97316"
-//                   strokeWidth={2}
-//                 />
-//                 <Line
-//                   type="monotone"
-//                   dataKey="profit"
-//                   stroke="#22c55e"
-//                   strokeWidth={2}
-//                 />
-//               </LineChart>
-//             </ResponsiveContainer>
-//           </div>
-//         </div>
-
-//         {/* Pending Transactions */}
-//         <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-md">
-//           <h2 className="text-xl font-semibold text-orange-500 mb-6">
-//             Pending Transactions
-//           </h2>
-//           {(dashboardData?.pendingDeposits ?? 0) + (dashboardData?.pendingWithdrawals ?? 0) === 0 ? (
-//             <p className="text-gray-500 dark:text-gray-400">No pending transactions</p>
-//           ) : (
-//             <div className="space-y-2">
-//               {(dashboardData?.pendingDeposits ?? 0) > 0 && (
-//                 <p className="text-blue-500">
-//                   {dashboardData.pendingDeposits} deposit(s) pending
-//                 </p>
-//               )}
-//               {(dashboardData?.pendingWithdrawals ?? 0) > 0 && (
-//                 <p className="text-red-500">
-//                   {dashboardData.pendingWithdrawals} withdrawal(s) pending
-//                 </p>
-//               )}
-//             </div>
-//           )}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
-
-
-
-
-// import React, { useState, useEffect } from 'react';
-// import { motion } from 'framer-motion';
-// import { useNavigate } from 'react-router-dom';
-// import {
-//   BanknotesIcon,
-//   ArrowTrendingUpIcon,
-//   ArrowDownTrayIcon,
-//   ArrowUpTrayIcon,
-//   ChartBarIcon,
-//   UserIcon,
-//   CalendarIcon,
-// } from '@heroicons/react/24/solid';
-// import {
-//   LineChart,
-//   Line,
-//   XAxis,
-//   YAxis,
-//   CartesianGrid,
-//   Tooltip,
-//   ResponsiveContainer,
-// } from 'recharts';
-
-// import { userService } from '../../api/userApi';
-// import { useTheme } from '../ui/ThemeContext';
-
-// export default function Dashboard() {
-//   const navigate = useNavigate();
-//   const { theme } = useTheme();
-//   const isDark = theme === 'dark';
-
-//   const [loading, setLoading] = useState(true);
-//   const [profile, setProfile] = useState(null);
-
-//   useEffect(() => {
-//     const fetchProfile = async () => {
-//       try {
-//         setLoading(true);
-//         const res = await userService.getProfile();
-//         if (res?.success) {
-//           setProfile(res.data);
-//         }
-//       } catch (err) {
-//         console.error('Profile fetch error:', err);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchProfile();
-//   }, []);
-
-//   if (loading || !profile) {
-//     return (
-//       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
-//         <motion.div
-//           animate={{ rotate: 360 }}
-//           transition={{ repeat: Infinity, duration: 1.2, ease: 'linear' }}
-//           className="w-12 h-12 border-4 border-orange-600 border-t-transparent rounded-full"
-//         />
-//       </div>
-//     );
-//   }
-
-//   const formatMoney = (num) =>
-//     Number(num ?? 0).toLocaleString('en-US', {
-//       minimumFractionDigits: 2,
-//       maximumFractionDigits: 2,
-//     });
-
-//   const totalCryptoBalance = Object.values(profile.cryptoBalance || {}).reduce(
-//     (sum, val) => sum + Number(val ?? 0),
-//     0
-//   );
-
-//   // For now — placeholder chart (remove or replace with real data later)
-//   const placeholderChart = Array.from({ length: 7 }, (_, i) => {
-//     const date = new Date();
-//     date.setDate(date.getDate() - (6 - i));
-//     return {
-//       date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-//       balance: totalCryptoBalance,
-//       profit: profile.totalEarnings ?? 0,
-//     };
-//   });
-
-//   const joinedDate = new Date(profile.createdAt).toLocaleDateString('en-US', {
-//     month: 'long',
-//     year: 'numeric',
-//   });
-
-//   const lastLoginDate = new Date(profile.lastLogin).toLocaleString('en-US', {
-//     dateStyle: 'medium',
-//     timeStyle: 'short',
-//   });
-
-//   return (
-//     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 p-5 md:p-8">
-//       <div className="max-w-7xl mx-auto space-y-8 md:space-y-10">
-
-//         {/* Header + User Info */}
-//         <motion.div
-//           initial={{ opacity: 0, y: -20 }}
-//           animate={{ opacity: 1, y: 0 }}
-//           className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
-//         >
-//           <div>
-//             <h1 className="text-2xl md:text-3xl font-bold text-orange-600">
-//               Welcome, {profile.fullName || profile.username}
-//             </h1>
-//             <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
-//               @{profile.username} • {profile.country}
-//             </p>
-//           </div>
-
-//           <div className="flex items-center gap-3 text-sm">
-//             <div className="flex items-center gap-1.5">
-//               <CalendarIcon className="w-4 h-4 text-gray-500" />
-//               <span>Joined {joinedDate}</span>
-//             </div>
-//             <div className="hidden sm:block text-gray-500">•</div>
-//             <div className="flex items-center gap-1.5">
-//               <UserIcon className="w-4 h-4 text-gray-500" />
-//               <span>Last active: {lastLoginDate}</span>
-//             </div>
-//           </div>
-//         </motion.div>
-
-//         {/* Stats Cards */}
-//         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
-//           {[
-//             {
-//               title: 'Account Balance',
-//               value: totalCryptoBalance,
-//               icon: BanknotesIcon,
-//               color: 'from-orange-600 to-orange-500',
-//             },
-//             {
-//               title: 'Total Earnings',
-//               value: profile.totalEarnings ?? 0,
-//               icon: ArrowTrendingUpIcon,
-//               color: 'from-emerald-600 to-emerald-500',
-//             },
-//             {
-//               title: 'Deposited',
-//               value: profile.totalDeposited ?? 0,
-//               icon: ArrowDownTrayIcon,
-//               color: 'from-blue-600 to-blue-500',
-//             },
-//             {
-//               title: 'Withdrawn',
-//               value: profile.totalWithdrawn ?? 0,
-//               icon: ArrowUpTrayIcon,
-//               color: 'from-red-600 to-red-500',
-//             },
-//           ].map((item, i) => (
-//             <motion.div
-//               key={item.title}
-//               initial={{ opacity: 0, y: 20 }}
-//               animate={{ opacity: 1, y: 0 }}
-//               transition={{ delay: i * 0.07 }}
-//               className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-5 shadow-sm"
-//             >
-//               <div className={`inline-flex p-3 bg-gradient-to-br ${item.color} rounded-lg mb-3`}>
-//                 <item.icon className="w-6 h-6 text-white" />
-//               </div>
-//               <p className="text-sm text-gray-500 dark:text-gray-400">{item.title}</p>
-//               <p className="text-2xl font-bold mt-1">${formatMoney(item.value)}</p>
-//             </motion.div>
-//           ))}
-//         </div>
-
-//         {/* Quick Actions */}
-//         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
-//           <button
-//             onClick={() => navigate('/deposits')}
-//             className="bg-gradient-to-r from-blue-600 to-blue-500 hover:brightness-110 text-white font-semibold py-4 rounded-xl shadow-md transition"
-//           >
-//             Deposit Funds
-//           </button>
-//           <button
-//             onClick={() => navigate('/withdraw')}
-//             className="bg-gradient-to-r from-red-600 to-red-500 hover:brightness-110 text-white font-semibold py-4 rounded-xl shadow-md transition"
-//           >
-//             Withdraw
-//           </button>
-//           <button
-//             onClick={() => navigate('/trade')}
-//             className="bg-gradient-to-r from-orange-600 to-orange-500 hover:brightness-110 text-white font-semibold py-4 rounded-xl shadow-md transition"
-//           >
-//             Start Trading
-//           </button>
-//         </div>
-
-//         {/* Simple Portfolio Chart (placeholder) */}
-//         <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-5 md:p-6 shadow-sm">
-//           <h2 className="text-lg md:text-xl font-semibold text-orange-500 mb-5 flex items-center gap-2">
-//             <ChartBarIcon className="w-5 h-5 md:w-6 md:h-6" />
-//             Portfolio Overview
-//           </h2>
-
-//           {totalCryptoBalance === 0 ? (
-//             <div className="h-64 flex items-center justify-center text-gray-500 dark:text-gray-400">
-//               <p>No trading activity yet • Make your first deposit to see growth</p>
-//             </div>
-//           ) : (
-//             <div className="h-64 md:h-72">
-//               <ResponsiveContainer width="100%" height="100%">
-//                 <LineChart data={placeholderChart}>
-//                   <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#374151' : '#e5e7eb'} />
-//                   <XAxis dataKey="date" stroke="#9ca3af" fontSize={12} />
-//                   <YAxis stroke="#9ca3af" fontSize={12} />
-//                   <Tooltip />
-//                   <Line type="monotone" dataKey="balance" stroke="#f97316" strokeWidth={2} name="Balance" />
-//                   <Line type="monotone" dataKey="profit" stroke="#22c55e" strokeWidth={2} name="Earnings" />
-//                 </LineChart>
-//               </ResponsiveContainer>
-//             </div>
-//           )}
-//         </div>
-
-//         {/* Referral Info */}
-//         {profile.referralCode && (
-//           <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-5 shadow-sm">
-//             <h2 className="text-lg font-semibold text-orange-500 mb-3">Invite Friends</h2>
-//             <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-//               <div className="flex-1">
-//                 <p className="text-sm text-gray-500">Your referral code:</p>
-//                 <p className="font-mono text-lg font-bold">{profile.referralCode}</p>
-//               </div>
-//               <button
-//                 onClick={() => {
-//                   navigator.clipboard.writeText(profile.referralCode);
-//                   alert('Referral code copied!');
-//                 }}
-//                 className="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 px-5 py-2.5 rounded-lg text-sm font-medium transition"
-//               >
-//                 Copy Code
-//               </button>
-//             </div>
-//           </div>
-//         )}
-//       </div>
-//     </div>
-//   );
-// }
-
-
-
-
-// import React, { useState, useEffect } from 'react';
-// import { motion } from 'framer-motion';
-// import { useNavigate } from 'react-router-dom';
-// import {
-//   BanknotesIcon,
-//   ArrowTrendingUpIcon,
-//   ArrowDownTrayIcon,
-//   ArrowUpTrayIcon,
-//   ChartBarIcon,
-//   UserIcon,
-//   CalendarIcon,
-// } from '@heroicons/react/24/solid';
-// import {
-//   LineChart,
-//   Line,
-//   XAxis,
-//   YAxis,
-//   CartesianGrid,
-//   Tooltip,
-//   ResponsiveContainer,
-// } from 'recharts';
-
-// import { userService } from '../../api/userApi';
-// import { useTheme } from '../ui/ThemeContext';
-
-// export default function Dashboard() {
-//   const navigate = useNavigate();
-//   const { theme } = useTheme();
-//   const isDark = theme === 'dark';
-
-//   const [loading, setLoading] = useState(true);
-//   const [profile, setProfile] = useState(null);
-
-//   useEffect(() => {
-//     const fetchProfile = async () => {
-//       try {
-//         setLoading(true);
-//         const res = await userService.getProfile();
-//         if (res?.success) {
-//           setProfile(res.data);
-//         }
-//       } catch (err) {
-//         console.error('Profile fetch error:', err);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchProfile();
-//   }, []);
-
-//   if (loading || !profile) {
-//     return (
-//       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
-//         <motion.div
-//           animate={{ rotate: 360 }}
-//           transition={{ repeat: Infinity, duration: 1.2, ease: 'linear' }}
-//           className="w-12 h-12 border-4 border-orange-600 border-t-transparent rounded-full"
-//         />
-//       </div>
-//     );
-//   }
-
-//   const formatMoney = (num) =>
-//     Number(num ?? 0).toLocaleString('en-US', {
-//       minimumFractionDigits: 2,
-//       maximumFractionDigits: 2,
-//     });
-
-//   const totalCryptoBalance = Object.values(profile.cryptoBalance || {}).reduce(
-//     (sum, val) => sum + Number(val ?? 0),
-//     0
-//   );
-
-//   // For now — placeholder chart
-//   const placeholderChart = Array.from({ length: 7 }, (_, i) => {
-//     const date = new Date();
-//     date.setDate(date.getDate() - (6 - i));
-//     return {
-//       date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-//       balance: totalCryptoBalance,
-//       profit: profile.totalEarnings ?? 0,
-//     };
-//   });
-
-//   const joinedDate = new Date(profile.createdAt).toLocaleDateString('en-US', {
-//     month: 'long',
-//     year: 'numeric',
-//   });
-
-//   const lastLoginDate = new Date(profile.lastLogin).toLocaleString('en-US', {
-//     dateStyle: 'medium',
-//     timeStyle: 'short',
-//   });
-
-//   // Stats data
-//   const stats = [
-//     {
-//       title: 'Account Balance',
-//       value: totalCryptoBalance,
-//       icon: BanknotesIcon,
-//       color: 'from-orange-600 to-orange-500',
-//     },
-//     {
-//       title: 'Total Earnings',
-//       value: profile.totalEarnings ?? 0,
-//       icon: ArrowTrendingUpIcon,
-//       color: 'from-emerald-600 to-emerald-500',
-//     },
-//     {
-//       title: 'Deposited',
-//       value: profile.totalDeposited ?? 0,
-//       icon: ArrowDownTrayIcon,
-//       color: 'from-blue-600 to-blue-500',
-//     },
-//     {
-//       title: 'Withdrawn',
-//       value: profile.totalWithdrawn ?? 0,
-//       icon: ArrowUpTrayIcon,
-//       color: 'from-red-600 to-red-500',
-//     },
-//   ];
-
-//   return (
-//     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 p-5 md:p-8">
-//       <div className="max-w-7xl mx-auto space-y-8 md:space-y-10">
-
-//         {/* Header + User Info */}
-//         <motion.div
-//           initial={{ opacity: 0, y: -20 }}
-//           animate={{ opacity: 1, y: 0 }}
-//           className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
-//         >
-//           <div>
-//             <h1 className="text-2xl md:text-3xl font-bold text-orange-600">
-//               Welcome, {profile.fullName || profile.username}
-//             </h1>
-//             <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
-//               @{profile.username} • {profile.country}
-//             </p>
-//           </div>
-
-//           <div className="flex items-center gap-3 text-sm">
-//             <div className="flex items-center gap-1.5">
-//               <CalendarIcon className="w-4 h-4 text-gray-500" />
-//               <span>Joined {joinedDate}</span>
-//             </div>
-//             <div className="hidden sm:block text-gray-500">•</div>
-//             <div className="flex items-center gap-1.5">
-//               <UserIcon className="w-4 h-4 text-gray-500" />
-//               <span>Last active: {lastLoginDate}</span>
-//             </div>
-//           </div>
-//         </motion.div>
-
-//         {/* Stats Cards - Improved mobile layout */}
-//         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-//           {stats.map((item, i) => (
-//             <motion.div
-//               key={item.title}
-//               initial={{ opacity: 0, y: 20 }}
-//               animate={{ opacity: 1, y: 0 }}
-//               transition={{ delay: i * 0.07 }}
-//               className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4 sm:p-5 shadow-sm"
-//             >
-//               <div className={`inline-flex p-2.5 sm:p-3 bg-gradient-to-br ${item.color} rounded-lg mb-3`}>
-//                 <item.icon className="w-6 h-6 text-white" />
-//               </div>
-//               <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">{item.title}</p>
-//               <p className="text-xl sm:text-2xl font-bold mt-1">
-//                 ${formatMoney(item.value)}
-//               </p>
-//             </motion.div>
-//           ))}
-//         </div>
-
-//         {/* Quick Actions */}
-//         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
-//           <button
-//             onClick={() => navigate('/deposits')}
-//             className="bg-gradient-to-r from-blue-600 to-blue-500 hover:brightness-110 text-white font-semibold py-4 rounded-xl shadow-md transition"
-//           >
-//             Deposit Funds
-//           </button>
-//           <button
-//             onClick={() => navigate('/withdraw')}
-//             className="bg-gradient-to-r from-red-600 to-red-500 hover:brightness-110 text-white font-semibold py-4 rounded-xl shadow-md transition"
-//           >
-//             Withdraw
-//           </button>
-//           <button
-//             onClick={() => navigate('/trade')}
-//             className="bg-gradient-to-r from-orange-600 to-orange-500 hover:brightness-110 text-white font-semibold py-4 rounded-xl shadow-md transition"
-//           >
-//             Start Trading
-//           </button>
-//         </div>
-
-//         {/* Simple Portfolio Chart */}
-//         <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-5 md:p-6 shadow-sm">
-//           <h2 className="text-lg md:text-xl font-semibold text-orange-500 mb-5 flex items-center gap-2">
-//             <ChartBarIcon className="w-5 h-5 md:w-6 md:h-6" />
-//             Portfolio Overview
-//           </h2>
-
-//           {totalCryptoBalance === 0 ? (
-//             <div className="h-64 flex items-center justify-center text-gray-500 dark:text-gray-400">
-//               <p>No trading activity yet • Make your first deposit to see growth</p>
-//             </div>
-//           ) : (
-//             <div className="h-64 md:h-72">
-//               <ResponsiveContainer width="100%" height="100%">
-//                 <LineChart data={placeholderChart}>
-//                   <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#374151' : '#e5e7eb'} />
-//                   <XAxis dataKey="date" stroke="#9ca3af" fontSize={12} />
-//                   <YAxis stroke="#9ca3af" fontSize={12} />
-//                   <Tooltip />
-//                   <Line type="monotone" dataKey="balance" stroke="#f97316" strokeWidth={2} name="Balance" />
-//                   <Line type="monotone" dataKey="profit" stroke="#22c55e" strokeWidth={2} name="Earnings" />
-//                 </LineChart>
-//               </ResponsiveContainer>
-//             </div>
-//           )}
-//         </div>
-
-//         {/* Referral Info */}
-//         {profile.referralCode && (
-//           <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-5 shadow-sm">
-//             <h2 className="text-lg font-semibold text-orange-500 mb-3">Invite Friends</h2>
-//             <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-//               <div className="flex-1">
-//                 <p className="text-sm text-gray-500">Your referral code:</p>
-//                 <p className="font-mono text-lg font-bold">{profile.referralCode}</p>
-//               </div>
-//               <button
-//                 onClick={() => {
-//                   navigator.clipboard.writeText(profile.referralCode);
-//                   alert('Referral code copied!');
-//                 }}
-//                 className="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 px-5 py-2.5 rounded-lg text-sm font-medium transition"
-//               >
-//                 Copy Code
-//               </button>
-//             </div>
-//           </div>
-//         )}
-//       </div>
-//     </div>
-//   );
-// }
-
-
-
-
-
-// import React, { useState, useEffect } from 'react';
-// import { motion } from 'framer-motion';
-// import { useNavigate } from 'react-router-dom';
-// import {
-//   BanknotesIcon,
-//   ArrowTrendingUpIcon,
-//   ArrowDownTrayIcon,
-//   ArrowUpTrayIcon,
-//   ChartBarIcon,
-//   UserIcon,
-//   CalendarIcon,
-// } from '@heroicons/react/24/solid';
-// import {
-//   LineChart,
-//   Line,
-//   XAxis,
-//   YAxis,
-//   CartesianGrid,
-//   Tooltip,
-//   ResponsiveContainer,
-// } from 'recharts';
-
-// import { userService } from '../../api/userApi';
-// import { useTheme } from '../ui/ThemeContext';
-
-// // Replace with your actual logo path
-// import companyLogo from '../../assets/flux2.svg'; // ← update this path
-
-// export default function Dashboard() {
-//   const navigate = useNavigate();
-//   const { theme } = useTheme();
-//   const isDark = theme === 'dark';
-
-//   const [loading, setLoading] = useState(true);
-//   const [profile, setProfile] = useState(null);
-
-//   useEffect(() => {
-//     const fetchProfile = async () => {
-//       try {
-//         setLoading(true);
-//         const res = await userService.getProfile();
-//         if (res?.success) {
-//           setProfile(res.data);
-//         }
-//       } catch (err) {
-//         console.error('Profile fetch error:', err);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchProfile();
-//   }, []);
-
-//   if (loading || !profile) {
-//     return (
-//       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
-//         <motion.div
-//           animate={{ rotate: 360 }}
-//           transition={{ repeat: Infinity, duration: 1.2, ease: 'linear' }}
-//           className="w-12 h-12 border-4 border-orange-600 border-t-transparent rounded-full"
-//         />
-//       </div>
-//     );
-//   }
-
-//   const formatMoney = (num) =>
-//     Number(num ?? 0).toLocaleString('en-US', {
-//       minimumFractionDigits: 2,
-//       maximumFractionDigits: 2,
-//     });
-
-//   const totalCryptoBalance = Object.values(profile.cryptoBalance || {}).reduce(
-//     (sum, val) => sum + Number(val ?? 0),
-//     0
-//   );
-
-//   const placeholderChart = Array.from({ length: 7 }, (_, i) => {
-//     const date = new Date();
-//     date.setDate(date.getDate() - (6 - i));
-//     return {
-//       date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-//       balance: totalCryptoBalance,
-//       profit: profile.totalEarnings ?? 0,
-//     };
-//   });
-
-//   const joinedDate = new Date(profile.createdAt).toLocaleDateString('en-US', {
-//     month: 'long',
-//     year: 'numeric',
-//   });
-
-//   const lastLoginDate = new Date(profile.lastLogin).toLocaleString('en-US', {
-//     dateStyle: 'medium',
-//     timeStyle: 'short',
-//   });
-
-//   const stats = [
-//     {
-//       title: 'Account Balance',
-//       value: totalCryptoBalance,
-//       icon: BanknotesIcon,
-//       color: 'from-orange-600 to-orange-500',
-//     },
-//     {
-//       title: 'Total Earnings',
-//       value: profile.totalEarnings ?? 0,
-//       icon: ArrowTrendingUpIcon,
-//       color: 'from-emerald-600 to-emerald-500',
-//     },
-//     {
-//       title: 'Deposited',
-//       value: profile.totalDeposited ?? 0,
-//       icon: ArrowDownTrayIcon,
-//       color: 'from-blue-600 to-blue-500',
-//     },
-//     {
-//       title: 'Withdrawn',
-//       value: profile.totalWithdrawn ?? 0,
-//       icon: ArrowUpTrayIcon,
-//       color: 'from-red-600 to-red-500',
-//     },
-//   ];
-
-//   return (
-//     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 p-10  md:p-10">
-//       <div className="max-w-7xl mx-auto space-y-8 md:space-y-10">
-
-//         {/* Header + User Info */}
-//         <motion.div
-//           initial={{ opacity: 0, y: -20 }}
-//           animate={{ opacity: 1, y: 0 }}
-//           className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 md:gap-6"
-//         >
-//           <div>
-//             <h1 className="text-2xl md:text-3xl font-bold text-orange-600">
-//               Welcome, {profile.fullName || profile.username}
-//             </h1>
-//             <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
-//               @{profile.username} • {profile.country}
-//             </p>
-//           </div>
-
-//           {/* Right side: Joined / Last active + Company Logo */}
-//           <div className="flex mt-2 flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
-//             {/* Company Logo with breathing animation */}
-//             <motion.div
-//               animate={{
-//                 scale: [1, 1.08, 1],
-//                 opacity: [0.9, 1, 0.9],
-//               }}
-//               transition={{
-//                 duration: 4,
-//                 repeat: Infinity,
-//                 repeatType: "reverse",
-//                 ease: "easeInOut",
-//               }}
-//               className="flex items-center justify-center"
-//             >
-//               <img
-//                 src={companyLogo}
-//                 alt="Company Logo"
-//                 className="h-20 w-full md:h-14 md:w-14 object-cover  bg-gray-500 dark:bg-gray-800 p-1.5 border border-gray-200 dark:border-gray-700"
-//               />
-//             </motion.div>
-
-           
-           
-//           </div>
-//         </motion.div>
-
-//         {/* Stats Cards */}
-//         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-//           {stats.map((item, i) => (
-//             <motion.div
-//               key={item.title}
-//               initial={{ opacity: 0, y: 20 }}
-//               animate={{ opacity: 1, y: 0 }}
-//               transition={{ delay: i * 0.07 }}
-//               className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4 sm:p-5 shadow-sm"
-//             >
-//               <div className={`inline-flex p-2.5 sm:p-3 bg-gradient-to-br ${item.color} rounded-lg mb-3`}>
-//                 <item.icon className="w-6 h-6 text-white" />
-//               </div>
-//               <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">{item.title}</p>
-//               <p className="text-xl sm:text-2xl font-bold mt-1">
-//                 ${formatMoney(item.value)}
-//               </p>
-//             </motion.div>
-//           ))}
-//         </div>
-
-//         {/* Quick Actions */}
-//         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
-//           <button
-//             onClick={() => navigate('/deposits')}
-//             className="bg-gradient-to-r from-blue-600 to-blue-500 hover:brightness-110 text-white font-semibold py-4 rounded-xl shadow-md transition"
-//           >
-//             Deposit Funds
-//           </button>
-//           <button
-//             onClick={() => navigate('/withdraw')}
-//             className="bg-gradient-to-r from-red-600 to-red-500 hover:brightness-110 text-white font-semibold py-4 rounded-xl shadow-md transition"
-//           >
-//             Withdraw
-//           </button>
-//           <button
-//             onClick={() => navigate('/trade')}
-//             className="bg-gradient-to-r from-orange-600 to-orange-500 hover:brightness-110 text-white font-semibold py-4 rounded-xl shadow-md transition"
-//           >
-//             Start Trading
-//           </button>
-//         </div>
-
-//         {/* Portfolio Chart */}
-//         <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-5 md:p-6 shadow-sm">
-//           <h2 className="text-lg md:text-xl font-semibold text-orange-500 mb-5 flex items-center gap-2">
-//             <ChartBarIcon className="w-5 h-5 md:w-6 md:h-6" />
-//             Portfolio Overview
-//           </h2>
-
-//           {totalCryptoBalance === 0 ? (
-//             <div className="h-64 flex items-center justify-center text-gray-500 dark:text-gray-400">
-//               <p>No trading activity yet • Make your first deposit to see growth</p>
-//             </div>
-//           ) : (
-//             <div className="h-64 md:h-72">
-//               <ResponsiveContainer width="100%" height="100%">
-//                 <LineChart data={placeholderChart}>
-//                   <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#374151' : '#e5e7eb'} />
-//                   <XAxis dataKey="date" stroke="#9ca3af" fontSize={12} />
-//                   <YAxis stroke="#9ca3af" fontSize={12} />
-//                   <Tooltip />
-//                   <Line type="monotone" dataKey="balance" stroke="#f97316" strokeWidth={2} name="Balance" />
-//                   <Line type="monotone" dataKey="profit" stroke="#22c55e" strokeWidth={2} name="Earnings" />
-//                 </LineChart>
-//               </ResponsiveContainer>
-//             </div>
-//           )}
-//         </div>
-
-//         {/* Referral Info */}
-//         {profile.referralCode && (
-//           <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-5 shadow-sm">
-//             <h2 className="text-lg font-semibold text-orange-500 mb-3">Invite Friends</h2>
-//             <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-//               <div className="flex-1">
-//                 <p className="text-sm text-gray-500">Your referral code:</p>
-//                 <p className="font-mono text-lg font-bold">{profile.referralCode}</p>
-//               </div>
-//               <button
-//                 onClick={() => {
-//                   navigator.clipboard.writeText(profile.referralCode);
-//                   alert('Referral code copied!');
-//                 }}
-//                 className="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 px-5 py-2.5 rounded-lg text-sm font-medium transition"
-//               >
-//                 Copy Code
-//               </button>
-//             </div>
-//           </div>
-//         )}
-//       </div>
-//     </div>
-//   );
-// }
-
-
-
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion'; // Added AnimatePresence
+import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import {
   BanknotesIcon,
@@ -1241,10 +10,8 @@ import {
   ArrowDownTrayIcon,
   ArrowUpTrayIcon,
   ChartBarIcon,
-  UserIcon,
-  CalendarIcon,
-  XMarkIcon, // Added for closing popup
-  GiftIcon,  // Added for popup icon
+  XMarkIcon,
+  GiftIcon,
 } from '@heroicons/react/24/solid';
 import {
   LineChart,
@@ -1267,34 +34,63 @@ export default function Dashboard() {
 
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState(null);
-  const [showReferPopup, setShowReferPopup] = useState(false); // Popup state
-  const [change, setChange] = useState(false);
+  const [showReferPopup, setShowReferPopup] = useState(false);
 
-  // 1. Logic for the 1-minute interval popup
+  // Referral popup – shows once per login session
   useEffect(() => {
-    const interval = setInterval(() => {
-      setShowReferPopup(true);
-    }, 10000); // 60,000ms = 1 minute
+    const STORAGE_KEY = 'hasSeenReferralPopupThisSession';
 
-    return () => clearInterval(interval);
+    // Already shown in this browser session → skip
+    if (sessionStorage.getItem(STORAGE_KEY)) {
+      return;
+    }
+
+    const showDelayMs = 2200; // 2.2 seconds
+
+    const showTimer = setTimeout(() => {
+      setShowReferPopup(true);
+      sessionStorage.setItem(STORAGE_KEY, 'true');
+    }, showDelayMs);
+
+    return () => clearTimeout(showTimer);
   }, []);
 
+  // Auto-close after ~8 seconds
   useEffect(() => {
+    if (!showReferPopup) return;
+
+    const autoCloseMs = 8000;
+
+    const autoCloseTimer = setTimeout(() => {
+      setShowReferPopup(false);
+    }, autoCloseMs);
+
+    return () => clearTimeout(autoCloseTimer);
+  }, [showReferPopup]);
+
+  // Fetch profile
+  useEffect(() => {
+    let isCurrent = true;
+
     const fetchProfile = async () => {
       try {
         setLoading(true);
         const res = await userService.getProfile();
-        if (res?.success) {
+        if (isCurrent && res?.success) {
           setProfile(res.data);
         }
       } catch (err) {
-        console.error('Profile fetch error:', err);
+        console.error('Profile fetch failed:', err);
       } finally {
-        setLoading(false);
+        if (isCurrent) setLoading(false);
       }
     };
 
     fetchProfile();
+
+    return () => {
+      isCurrent = false;
+    };
   }, []);
 
   if (loading || !profile) {
@@ -1331,162 +127,128 @@ export default function Dashboard() {
   });
 
   const stats = [
-    {
-      title: 'Account Balance',
-      value: totalCryptoBalance,
-      icon: BanknotesIcon,
-      color: 'from-orange-600 to-orange-500',
-    },
-    {
-      title: 'Total Earnings',
-      value: profile.totalEarnings ?? 0,
-      icon: ArrowTrendingUpIcon,
-      color: 'from-emerald-600 to-emerald-500',
-    },
-    {
-      title: 'Deposited',
-      value: profile.totalDeposited ?? 0,
-      icon: ArrowDownTrayIcon,
-      color: 'from-blue-600 to-blue-500',
-    },
-    {
-      title: 'Withdrawn',
-      value: profile.totalWithdrawn ?? 0,
-      icon: ArrowUpTrayIcon,
-      color: 'from-red-600 to-red-500',
-    },
+    { title: 'Account Balance', value: totalCryptoBalance, icon: BanknotesIcon, color: 'from-orange-600 to-orange-500' },
+    { title: 'Total Earnings', value: profile.totalEarnings ?? 0, icon: ArrowTrendingUpIcon, color: 'from-emerald-600 to-emerald-500' },
+    { title: 'Deposited', value: profile.totalDeposited ?? 0, icon: ArrowDownTrayIcon, color: 'from-blue-600 to-blue-500' },
+    { title: 'Withdrawn', value: profile.totalWithdrawn ?? 0, icon: ArrowUpTrayIcon, color: 'from-red-600 to-red-500' },
   ];
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 p-6 md:p-10 relative">
-      
-      {/* --- REFERRAL POPUP --- */}
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         {showReferPopup && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <motion.div
+            key="overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+          >
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white dark:bg-gray-900 border border-orange-500/30 rounded-2xl p-6 max-w-sm w-full shadow-2xl relative"
+              key="card"
+              initial={{ scale: 0.82, y: 60, opacity: 0 }}
+              animate={{ scale: 1, y: 0, opacity: 1 }}
+              exit={{ scale: 0.82, y: 60, opacity: 0 }}
+              transition={{ type: 'spring', damping: 22, stiffness: 280 }}
+              className="bg-white dark:bg-gray-900 border border-orange-500/40 rounded-2xl p-7 max-w-sm w-full shadow-2xl relative"
             >
-              <button 
+              <button
                 onClick={() => setShowReferPopup(false)}
-                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-white"
+                className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
+                aria-label="Close"
               >
-                <XMarkIcon className="w-6 h-6" />
+                <XMarkIcon className="w-7 h-7" />
               </button>
-              
-              <div className="text-center space-y-4">
-                <div className="bg-orange-100 dark:bg-orange-900/30 w-16 h-16 rounded-full flex items-center justify-center mx-auto">
-                  <GiftIcon className="w-8 h-8 text-orange-600" />
+
+              <div className="text-center space-y-6 pt-3">
+                <div className="bg-orange-100 dark:bg-orange-950/50 w-20 h-20 rounded-full flex items-center justify-center mx-auto">
+                  <GiftIcon className="w-10 h-10 text-orange-600" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Special Bonus! 🎁</h3>
-                <p className="text-gray-600 dark:text-gray-400">
-                  Refer <span className="text-orange-600 font-bold text-lg">five friends</span> and earn exclusive rewards on your next trade!
+
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                  Referral Bonus Awaits! 🎁
+                </h3>
+
+                <p className="text-gray-600 dark:text-gray-300 text-[15px] leading-relaxed px-2">
+                  Invite <span className="font-semibold text-orange-600">5 friends</span> and unlock exclusive trading rewards.
                 </p>
+
                 <button
                   onClick={() => {
                     setShowReferPopup(false);
                     navigate('/refer');
                   }}
-                  className="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-xl transition shadow-lg shadow-orange-600/20"
+                  className="w-full bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600 text-white font-semibold py-3.5 rounded-xl transition shadow-lg shadow-orange-600/30"
                 >
-                  Get Started
+                  Refer Friends Now
                 </button>
               </div>
             </motion.div>
-          </div>
+          </motion.div>
         )}
       </AnimatePresence>
 
+      {/* ────────────── Main Dashboard Content ────────────── */}
       <div className="max-w-7xl mx-auto space-y-8 md:space-y-10">
-        {/* Header + User Info */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col sm:flex-col sm:items-start sm:justify-between gap-4 md:gap-6"
+          className="flex flex-col gap-4"
         >
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-orange-600">
+            <h1 className="text-3xl font-bold text-orange-600">
               Welcome, {profile.fullName || profile.username}
             </h1>
-            <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
+            <p className="text-gray-500 dark:text-gray-400 mt-1">
               @{profile.username} • {profile.country}
             </p>
           </div>
 
-     <div className="flex w-full mt-2 flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
+          <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
+            <motion.div
+              animate={{ scale: [1, 1.08, 1], opacity: [0.9, 1, 0.9] }}
+              transition={{ duration: 4, repeat: Infinity, repeatType: 'reverse' }}
+              className="flex items-center p-1 w-full justify-center md:hidden"
+            >
+              <img
+                src={companyLogo}
+                alt="Company Logo"
+                className="h-24 w-full object-cover bg-white dark:bg-gray-800 p-2 rounded-xl border border-gray-200 dark:border-gray-700"
+              />
+            </motion.div>
 
-  {/* 📱 MOBILE: Logo only */}
-  <motion.div
-    animate={{ scale: [1, 1.08, 1], opacity: [0.9, 1, 0.9] }}
-    transition={{ duration: 4, repeat: Infinity, repeatType: "reverse" }}
-    className="flex items-center p-1 justify-center md:hidden"
-  >
-    <img
-      src={companyLogo}
-      alt="Company Logo"
-      className="h-24 w-full object-cover bg-white dark:bg-gray-800 p-2 rounded-xl border border-gray-200 dark:border-gray-700"
-    />
-  </motion.div>
-
-  {/* 🖥️ DESKTOP: Sliding text */}
-  {/* <div className="hidden md:flex items-center overflow-hidden w-full max-w-md">
-    <motion.div
-      animate={{ x: ["100%", "-100%"] }}
-      transition={{
-        repeat: Infinity,
-        duration: 12,
-        ease: "linear",
-      }}
-      className="whitespace-nowrap text-lg font-semibold text-orange-600 dark:text-orange-400"
-    >
-      🚀 Trade smarter • Secure investments • Fast withdrawals • Trusted platform
-    </motion.div>
-  </div> */}
-
-  <div className="hidden md:flex items-center overflow-hidden w-full ">
-    <motion.div
-      animate={{ x: ["100%", "-100%"] }}
-      transition={{
-        repeat: Infinity,
-        duration: 12,
-        ease: "linear",
-      }}
-      className="whitespace-nowrap text-lg font-semibold text-orange-600 dark:text-orange-400"
-    >
-      🚀 Trade smarter • Secure investments • Fast withdrawals • Trusted platform
-    </motion.div>
-  </div>
-
-</div>
-
+            <div className="hidden md:block flex-1 overflow-hidden">
+              <motion.div
+                animate={{ x: ['100%', '-100%'] }}
+                transition={{ repeat: Infinity, duration: 14, ease: 'linear' }}
+                className="whitespace-nowrap text-lg font-medium text-orange-600 dark:text-orange-400"
+              >
+                🚀 Trade smarter • Secure investments • Fast withdrawals • Trusted platform
+              </motion.div>
+            </div>
+          </div>
         </motion.div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
           {stats.map((item, i) => (
             <motion.div
               key={item.title}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.07 }}
-              className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4 sm:p-5 shadow-sm"
+              transition={{ delay: i * 0.08 }}
+              className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-5 shadow-sm"
             >
-              <div className={`inline-flex p-2.5 sm:p-3 bg-gradient-to-br ${item.color} rounded-lg mb-3`}>
+              <div className={`inline-flex p-3 bg-gradient-to-br ${item.color} rounded-lg mb-4`}>
                 <item.icon className="w-6 h-6 text-white" />
               </div>
-              <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">{item.title}</p>
-              <p className="text-xl sm:text-2xl font-bold mt-1">
-                ${formatMoney(item.value)}
-              </p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">{item.title}</p>
+              <p className="text-2xl font-bold mt-1">${formatMoney(item.value)}</p>
             </motion.div>
           ))}
         </div>
 
-        {/* Quick Actions */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
           <button onClick={() => navigate('/deposits')} className="bg-gradient-to-r from-blue-600 to-blue-500 hover:brightness-110 text-white font-semibold py-4 rounded-xl shadow-md transition">
             Deposit Funds
           </button>
@@ -1498,21 +260,20 @@ export default function Dashboard() {
           </button>
         </div>
 
-        {/* Portfolio Chart */}
-        <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-5 md:p-6 shadow-sm">
-          <h2 className="text-lg md:text-xl font-semibold text-orange-500 mb-5 flex items-center gap-2">
-            <ChartBarIcon className="w-5 h-5 md:w-6 md:h-6" />
+        <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6 shadow-sm">
+          <h2 className="text-xl font-semibold text-orange-500 mb-6 flex items-center gap-2">
+            <ChartBarIcon className="w-6 h-6" />
             Portfolio Overview
           </h2>
-          <div className="h-64 md:h-72">
+          <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={placeholderChart}>
                 <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#374151' : '#e5e7eb'} />
                 <XAxis dataKey="date" stroke="#9ca3af" fontSize={12} />
                 <YAxis stroke="#9ca3af" fontSize={12} />
                 <Tooltip />
-                <Line type="monotone" dataKey="balance" stroke="#f97316" strokeWidth={2} name="Balance" />
-                <Line type="monotone" dataKey="profit" stroke="#22c55e" strokeWidth={2} name="Earnings" />
+                <Line type="monotone" dataKey="balance" stroke="#f97316" strokeWidth={2.5} name="Balance" dot={false} />
+                <Line type="monotone" dataKey="profit" stroke="#22c55e" strokeWidth={2.5} name="Earnings" dot={false} />
               </LineChart>
             </ResponsiveContainer>
           </div>

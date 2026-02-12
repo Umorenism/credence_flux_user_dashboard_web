@@ -872,18 +872,22 @@ export default function Sidebar({ isOpen, closeSidebar }) {
   }, []);
 
   const handleLogout = () => {
-    toast.success("Signed out successfully! 👋", {
-      position: "top-center",
-      autoClose: 2200,
-      theme: isDark ? "dark" : "light",
-    });
+  toast.success("Signed out successfully! 👋", {
+    position: "top-center",
+    autoClose: 2200,
+    theme: isDark ? "dark" : "light",
+  });
 
-    setTimeout(() => {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      navigate("/signup");
-    }, 900);
-  };
+  setTimeout(() => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    // This line makes sure the popup appears again on next login
+    sessionStorage.removeItem("hasSeenReferralPopupThisSession");
+
+    navigate("/signup");
+  }, 900);
+};
 
   const navItems = [
     { to: "/home", icon: FiHome, label: "Dashboard" },

@@ -1477,18 +1477,18 @@ const GetStarted = () => {
   const handleGetStarted = () => navigate('/signup');
 
   // Popup logic: Triggers every 60 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setShowReferPopup(true);
-    }, 10000); 
-    return () => clearInterval(interval);
-  }, []);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setShowReferPopup(true);
+  //   }, 10000); 
+  //   return () => clearInterval(interval);
+  // }, []);
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden relative font-mono">
       
       {/* Referral Popup Modal */}
-      <AnimatePresence>
+      {/* <AnimatePresence>
         {showReferPopup && (
           <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm">
             <motion.div
@@ -1525,7 +1525,7 @@ const GetStarted = () => {
             </motion.div>
           </div>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
 
       {/* Background FX */}
       <div className="fixed inset-0 pointer-events-none">

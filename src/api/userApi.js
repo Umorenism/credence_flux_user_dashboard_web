@@ -7,7 +7,46 @@ export const userService = {
     const res = await apiClient.get("/api/users/profile");
     console.log("getProfile response:", res.data);
     return res.data;
+
+
   },
+
+
+  generateReferralCode: async () => {
+    try {
+      const res = await apiClient.post("/api/users/referral/generate-code");
+      console.log("generateReferralCode response:", res.data);
+      return res.data;
+    } catch (err) {
+      console.error("generateReferralCode error:", err);
+      throw err;
+    }
+  },
+
+  getReferralStats: async () => {
+    try {
+      const res = await apiClient.get("/api/users/referral/stats");
+      console.log("getReferralStats response:", res.data);
+      return res.data;
+    } catch (err) {
+      console.error("getReferralStats error:", err);
+      throw err;
+    }
+  },
+
+  getReferralHistory: async (params = { limit: 20, skip: 0 }) => {
+    try {
+      const res = await apiClient.get("/api/users/referral/history", { params });
+      console.log("getReferralHistory response:", res.data);
+      return res.data;
+    } catch (err) {
+      console.error("getReferralHistory error:", err);
+      throw err;
+    }
+  },
+
+
+  
 
   // GET /api/users/dashboard
   getDashboard: async () => {

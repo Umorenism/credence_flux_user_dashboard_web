@@ -314,7 +314,7 @@ import {
 } from 'recharts';
 import { userService } from '../../api/userApi';
 import { useTheme } from '../ui/ThemeContext';
-import companyLogo from '../../assets/flux2.svg';
+import companyLogo from '../../assets/fy.png';
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -514,83 +514,69 @@ useEffect(() => {
       </AnimatePresence>
 
       <div className="max-w-7xl mx-auto space-y-8 lg:space-y-10">
-        {/* Header */}
-        {/* <motion.header
-          initial={{ opacity: 0, y: -15 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-5"
-        >
-          <div>
-            <h1 className="text-3xl sm:text-4xl font-bold text-orange-600 dark:text-orange-500">
-              Dashboard
-            </h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-1.5">
-              Overview • {new Date().toLocaleDateString()}
-            </p>
-          </div>
-
-          <div className="flex items-center gap-4 flex-wrap">
-            <div className="text-right">
-              <p className="text-sm text-gray-500 dark:text-gray-400">Main Balance</p>
-              <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
-                {formatUSD(balance)}
-              </p>
-            </div>
-            <img
-              src={companyLogo}
-              alt="Platform Logo"
-              className="h-14 sm:h-16 object-contain bg-white dark:bg-gray-800 rounded-xl p-2 border border-gray-200 dark:border-gray-700 shadow-sm"
-            />
-          </div>
-        </motion.header> */}
+        
 
         <motion.header
   initial={{ opacity: 0, y: -15 }}
   animate={{ opacity: 1, y: 0 }}
-  className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-5"
+  className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-6"
 >
-  <div>
-    <h1 className="text-3xl sm:text-4xl font-bold text-orange-600 dark:text-orange-500">
-      {profile?.fullName 
-        ? `Welcome back, ${profile.fullName.split(' ')[0]}`
-        : 'Welcome back'}
+  {/* LEFT SECTION */}
+  <div className="flex flex-col gap-1">
+    <h1 className="text-3xl sm:text-4xl font-bold text-orange-600 dark:text-orange-500 leading-tight">
+      {profile?.fullName
+        ? `Welcome back, ${profile.fullName.split(" ")[0]}`
+        : "Welcome back"}
     </h1>
-    {/* <p className="text-gray-600 dark:text-gray-400 mt-1.5">
+
+    {/* <p className="text-sm text-gray-500 dark:text-gray-400">
       Overview • {new Date().toLocaleDateString()}
     </p> */}
   </div>
 
-  <div className="flex items-center gap-4 flex-wrap">
-    <div className="text-right">
-      <p className="text-sm text-gray-500 dark:text-gray-400">Main Balance</p>
+  {/* RIGHT SECTION */}
+  <div className="flex-col  items-center justify-between w-full lg:w-auto gap-6">
+
+    {/* BALANCE CARD */}
+    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl px-5 py-3 shadow-sm">
+      <p className="text-xs text-gray-500 dark:text-gray-400">
+        Main Balance
+      </p>
+
       <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
         {formatUSD(balance)}
       </p>
     </div>
-    {/* <img
-      src={companyLogo}
-      alt="Platform Logo"
-      className="h-14 sm:h-16 object-contain bg-white dark:bg-gray-800 rounded-xl p-2 border border-gray-200 dark:border-gray-700 shadow-sm"
-    /> */}
+
+    
+
+    <motion.div
+  animate={{ scale: [1, 1.05, 1] }}
+  transition={{ duration: 4, repeat: Infinity }}
+  className="flex w-full mt-2 p-1 sm:hidden items-center justify-center"
+>
+  <img
+  src={companyLogo}
+  alt="Company Logo"
+  className="
+    h-20 items-center justify-center flex sm:h-32 lg:h-36
+    w-auto w-full
+    object-cover
+    bg-white dark:bg-gray-900
+    p-2 rounded-xl
+    border border-gray-200 dark:border-gray-700
+    shadow-md
+  "
+/>
+
+</motion.div>
+
+
   </div>
 </motion.header>
 
-        {/* Quick Action Buttons
-        <div className="grid grid-cols-3 gap-4 sm:gap-5">
-          {quickActions.map((action, idx) => (
-            <motion.button
-              key={action.label}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.1 }}
-              onClick={() => navigate(action.path)}
-              className={`bg-gradient-to-br ${action.color} text-white font-semibold py-5 sm:py-6 rounded-2xl shadow-lg hover:shadow-xl hover:brightness-110 transition-all flex flex-col items-center justify-center gap-2 text-base sm:text-lg`}
-            >
-              <action.icon className="w-7 h-7 sm:w-8 sm:h-8" />
-              {action.label}
-            </motion.button>
-          ))}
-        </div> */}
+
+        
 
         {/* Stats Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
@@ -605,9 +591,9 @@ useEffect(() => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.07 + 0.2 }}
-              className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-5 shadow hover:shadow-md transition-shadow"
+              className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-2 shadow hover:shadow-md transition-shadow"
             >
-              <div className={`inline-flex p-3 bg-gradient-to-br ${stat.color} rounded-xl mb-4`}>
+              <div className={`inline-flex p-2 bg-gradient-to-br ${stat.color} rounded-xl mb-4`}>
                 <stat.icon className="w-6 h-6 text-white" />
               </div>
               <p className="text-sm text-gray-500 dark:text-gray-400">{stat.title}</p>
@@ -619,7 +605,7 @@ useEffect(() => {
         </div>
 
         {/* Quick Action Buttons */}
-        <div className="grid grid-cols-3 gap-4 sm:gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
           {quickActions.map((action, idx) => (
             <motion.button
               key={action.label}
@@ -627,7 +613,7 @@ useEffect(() => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.1 }}
               onClick={() => navigate(action.path)}
-              className={`bg-gradient-to-br ${action.color} text-white font-semibold py-5 sm:py-6 rounded-2xl shadow-lg hover:shadow-xl hover:brightness-110 transition-all flex flex-col items-center justify-center gap-2 text-base sm:text-lg`}
+              className={`bg-gradient-to-br ${action.color} text-white font-semibold py-2 sm:py-6 rounded-2xl shadow-lg hover:shadow-xl hover:brightness-110 transition-all flex flex-col items-center justify-center gap-2 text-base sm:text-lg`}
             >
               <action.icon className="w-7 h-7 sm:w-8 sm:h-8" />
               {action.label}

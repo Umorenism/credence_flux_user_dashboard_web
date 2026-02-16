@@ -829,7 +829,7 @@ export default function Withdrawal() {
           animate={{ opacity: 1, y: 0 }}
           className="text-3xl md:text-4xl font-bold text-center text-orange-600 dark:text-orange-400"
         >
-          Withdraw Earnings, Victor
+          Withdraw your Earnings
         </motion.h1>
 
         <p className="text-center text-lg font-medium">

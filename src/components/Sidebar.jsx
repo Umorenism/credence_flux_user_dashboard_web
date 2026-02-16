@@ -818,6 +818,8 @@ import {
   FiLogOut,
   FiSun,
   FiMoon,
+  FiShield,           // ← new: for Privacy Policy
+  FiFileText,         // ← alternative icon style
 } from "react-icons/fi";
 import { toast } from "react-toastify";
 import { useTheme } from "./ui/ThemeContext";
@@ -827,7 +829,7 @@ import { motion } from "framer-motion";
 
 export default function Sidebar({ isOpen, closeSidebar }) {
   const navigate = useNavigate();
-  const { theme, toggleTheme } = useTheme(); // ← added toggleTheme
+  const { theme, toggleTheme } = useTheme();
   const isDark = theme === "dark";
 
   const [user, setUser] = useState(() => {
@@ -845,7 +847,6 @@ export default function Sidebar({ isOpen, closeSidebar }) {
       setLoading(false);
       return;
     }
-
     try {
       const res = await userService.getProfile();
       if (res?.success && res.data) {
@@ -867,38 +868,37 @@ export default function Sidebar({ isOpen, closeSidebar }) {
 
   useEffect(() => {
     loadProfile();
-    const interval = setInterval(loadProfile, 120000);
+    const interval = setInterval(loadProfile, 120000); // 2 minutes
     return () => clearInterval(interval);
   }, []);
 
   const handleLogout = () => {
-  toast.success("Signed out successfully! 👋", {
-    position: "top-center",
-    autoClose: 2200,
-    theme: isDark ? "dark" : "light",
-  });
+    toast.success("Signed out successfully! 👋", {
+      position: "top-center",
+      autoClose: 2200,
+      theme: isDark ? "dark" : "light",
+    });
 
-  setTimeout(() => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    setTimeout(() => {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      sessionStorage.removeItem("hasSeenReferralPopupThisSession");
+      navigate("/signup");
+    }, 900);
+  };
 
-    // This line makes sure the popup appears again on next login
-    sessionStorage.removeItem("hasSeenReferralPopupThisSession");
-
-    navigate("/signup");
-  }, 900);
-};
-
+  // Updated navigation items – added Privacy Policy
   const navItems = [
     { to: "/home", icon: FiHome, label: "Dashboard" },
     { to: "/deposits", icon: FiCreditCard, label: "Deposits" },
     { to: "/withdraw", icon: FiArrowDownCircle, label: "Withdraw" },
-    { to: "/crypto", icon: FiCornerRightDown, label: "Convert Crypto" },
+    // { to: "/crypto", icon: FiCornerRightDown, label: "Convert Crypto" },
     { to: "/transactions", icon: FiClock, label: "Transaction History" },
     { to: "/trade", icon: FiCornerRightDown, label: "Trade Now" },
     { to: "/join-trade", icon: FiUsers, label: "Join Trade" },
     { to: "/refer", icon: FiShare2, label: "Referrals" },
     { to: "/support", icon: FiHelpCircle, label: "Help & Support" },
+    { to: "/privacy-policy", icon: FiShield, label: "Privacy Policy" }, // ← NEW
   ];
 
   return (
@@ -1008,7 +1008,6 @@ export default function Sidebar({ isOpen, closeSidebar }) {
                 {user.fullName?.charAt(0)?.toUpperCase() || "U"}
               </div>
             )}
-
             <div className="flex-1 min-w-0">
               <p className="font-semibold text-gray-900 dark:text-gray-100 truncate">
                 {loading ? "Loading..." : user.fullName || "User"}

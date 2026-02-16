@@ -22,7 +22,7 @@ import Withdrawal from "./components/pages/Withdrawal";
 import TradingRecords from "./components/pages/TradingRecords";
 import Transactions from "./components/pages/Transaction";
 
-import CryptoPage from "./components/pages/CryptoPage";
+// import CryptoPage from "./components/pages/CryptoPage";
 import RecentTrades from "./components/pages/RecentTrades";
 import JoinTrade from "./components/pages/JoinTrade";
 import Referrals from "./components/pages/Referrals";
@@ -30,6 +30,7 @@ import Profile from "./components/pages/Profile";
 import Support from "./components/pages/Support";
 // import TradingPairs from "./components/pages/pairs/TradingPairs";
 import TradingDashboard from "./components/pages/TradingDashboard";
+import PrivacyPolicy from "./components/pages/PrivacyPolicy";
 
 function App() {
   return (
@@ -58,8 +59,9 @@ function App() {
             <Route path="/trading-records" element={<TradingRecords />} />
             <Route path="/transactions" element={<Transactions />} />
             <Route path="/trade" element={<TradingDashboard />} />
-            <Route path="/crypto" element={<CryptoPage />} />
+            {/* <Route path="/crypto" element={<CryptoPage />} /> */}
             <Route path="/recent-trades" element={<RecentTrades />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/join-trade" element={<JoinTrade />} />
             <Route path="/refer" element={<Referrals />} />
             <Route path="/profile" element={<Profile />} />

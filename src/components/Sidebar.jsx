@@ -824,7 +824,7 @@ import {
 import { toast } from "react-toastify";
 import { useTheme } from "./ui/ThemeContext";
 import { userService } from "../api/userApi";
-import logo from "../assets/flux2.svg";
+import logo from "../assets/fy.png";
 import { motion } from "framer-motion";
 
 export default function Sidebar({ isOpen, closeSidebar }) {
@@ -926,15 +926,16 @@ export default function Sidebar({ isOpen, closeSidebar }) {
       >
         {/* Logo Section */}
         <div className="px-5 pt-5 pb-2 border-b border-gray-200 dark:border-gray-800">
-          <div className="h-16 w-full flex items-center justify-start overflow-hidden">
-            <img
-              src={logo}
-              alt="CredenceFlux Logo"
-              className="h-14 w-auto max-w-[280px] object-contain drop-shadow-xl cursor-pointer"
-              onClick={() => navigate("/home")}
-            />
-          </div>
-        </div>
+  <div className="h-[150px] w-full flex items-center justify-start overflow-hidden">
+    <img
+      src={logo}
+      alt="CredenceFlux Logo"
+      className="h-full w-auto  object-cover drop-shadow-xl cursor-pointer"
+      onClick={() => navigate("/home")}
+    />
+  </div>
+</div>
+
 
         {/* Main Navigation */}
         <nav className="flex-1 px-3 pt-2 pb-4 space-y-1 relative z-10">

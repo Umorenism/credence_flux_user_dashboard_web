@@ -5306,7 +5306,10 @@ export default function TradingDashboard() {
                 </div>
 
                 <div className="mt-2 flex justify-between text-sm text-gray-600 dark:text-gray-400">
-                  <span>Min: <strong>${MIN_TRADE_USDT}</strong></span>
+                  <div className='flex flex-col py-2'>
+                    <span>Min: <strong>${MIN_TRADE_USDT}</strong></span>
+                    <span>ROI:2%</span>
+                  </div>
                   <span>Max: <strong>${MAX_TRADE_USDT.toLocaleString()}</strong></span>
                 </div>
 
